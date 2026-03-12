@@ -542,6 +542,109 @@ const buttonVariants = cva("base-classes", {
 
 ---
 
+## 8. Coding Standards
+
+### 8.1 Code Splitting
+
+A file or component should not be too large. Separate into independent files:
+
+| Content | Location |
+|---------|------------|
+| Zod schemas | `lib/schemas/` |
+| Form components | `components/[feature]-form.tsx` |
+| Page | `app/.../page.tsx` |
+
+**Incorrect example** (everything in one file):
+```
+app/(auth)/login/page.tsx
+├── Schema Zod
+├── LoginForm
+├── LoginFormFallback
+└── LoginPage
+```
+
+**Correct example** (separated):
+```
+lib/schemas/login.ts           # Zod schema
+components/ui/login-form.tsx    # Component with react-hook-form
+app/(auth)/login/page.tsx       # Page using the component
+```
+
+### 8.2 Forms
+
+All forms must follow this structure:
+
+- **State management**: `react-hook-form`
+- **Validation**: `zod` with `@hookform/resolvers/zod`
+- **Components**: shadcn/ui (`Input`, `Label`, etc.)
+- **Typing**: Strict, no `any`
+
+**File structure:**
+```
+lib/schemas/           # Zod validation schemas
+├── login.ts
+├── register.ts
+├── profile.ts
+└── project.ts
+```
+
+### 8.3 Correct Form Example
+
+```typescript
+// lib/schemas/login.ts
+import { z } from "zod";
+
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export type LoginFormData = z.infer<typeof loginSchema>;
+```
+
+```typescript
+// components/ui/login-form.tsx
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginFormData } from "@/lib/schemas/login";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export function LoginForm() {
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    // handle submission
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Label htmlFor="email">Email</Label>
+      <Input id="email" {...form.register("email")} />
+      {form.formState.errors.email && (
+        <p>{form.formState.errors.email.message}</p>
+      )}
+      {/* ... */}
+    </form>
+  );
+}
+```
+
+### 8.4 Important Rules
+
+1. **NEVER** put Zod schemas in the same file as the component
+2. **NEVER** use `any` - use `unknown` when necessary
+3. **ALWAYS** explicitly type functions and parameters
+4. **ALWAYS** use path aliases `@/` for imports
+
+---
+
 ## Appendix: Quick Reference
 
 ### Database Commands
