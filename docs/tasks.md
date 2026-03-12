@@ -7,20 +7,20 @@ This document decomposes the project into small, actionable tasks organized by p
 ## Phase 1: Setup & Infrastructure
 
 ### 1.1 Dependencies
-- [ ] **1.1.1** Install `next-auth`, `bcrypt`, `@types/bcrypt`
-- [ ] **1.1.2** Install `cloudinary`, `next-cloudinary`
+- [x] **1.1.1** Install `next-auth`, `bcrypt`, `@types/bcrypt`
+- [x] **1.1.2** Install `cloudinary`, `next-cloudinary`
 
 ### 1.2 Database Schema
-- [ ] **1.2.1** Configure `drizzle.config.ts` for Turso
-- [ ] **1.2.2** Add `AUTH_SECRET` to `.env`
-- [ ] **1.2.3** Create `db/schema.ts` - `users` table
-- [ ] **1.2.4** Create `db/schema.ts` - `profiles` table
-- [ ] **1.2.5** Create `db/schema.ts` - `projects` table
-- [ ] **1.2.6** Create `db/schema.ts` - `technologies` + junction table
+- [x] **1.2.1** Configure `drizzle.config.ts` for Turso
+- [x] **1.2.2** Add `AUTH_SECRET` to `.env`
+- [x] **1.2.3** Create `db/schema.ts` - `users` table
+- [x] **1.2.4** Create `db/schema.ts` - `profiles` table
+- [x] **1.2.5** Create `db/schema.ts` - `projects` table
+- [x] **1.2.6** Create `db/schema.ts` - `technologies` + junction table
 
 ### 1.3 Database Setup
-- [ ] **1.3.1** Generate migrations: `npx drizzle-kit generate`
-- [ ] **1.3.2** Push schema to database: `npx drizzle-kit push`
+- [x] **1.3.1** Generate migrations: `npx drizzle-kit generate`
+- [x] **1.3.2** Push schema to database: `npx drizzle-kit push`
 
 ---
 
