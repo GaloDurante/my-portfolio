@@ -194,8 +194,16 @@ Key patterns:
 
 ## Git Conventions
 
+- **NEVER work directly on the `main` branch**
+  - Create a branch for each feature/task: `git checkout -b feature/name`
+  - Or use prefixes: `task/`, `fix/`, `refactor/`
+
+- **Before finishing a task:**
+  1. Run `npm run lint` and `npm run build` to verify there are no errors
+  2. DO NOT commit, push, or create a PR without user approval
+  3. Inform the user that the task is ready for review
+
 - Use descriptive commit messages
-- Create feature branches for new features
 - Never commit `.env` files or secrets
 
 ## Agent Skills
