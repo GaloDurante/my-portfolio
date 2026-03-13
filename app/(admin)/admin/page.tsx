@@ -1,12 +1,17 @@
 import { auth, signOut } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Admin | Portfolio Galo Durante",
+};
 
 export default async function AdminPage() {
   const session = await auth();
 
   if (!session) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   return (

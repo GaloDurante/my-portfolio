@@ -56,14 +56,14 @@ Use named exports for components and utilities.
 
 ### Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Files (utils) | kebab-case | `utils.ts`, `date-formatter.ts` |
-| Files (components) | PascalCase | `Button.tsx`, `HeroSection.tsx` |
-| Components | PascalCase | `Button`, `ProjectCard` |
-| Functions | camelCase | `formatDate`, `getProjects` |
-| Constants | SCREAMING_SNAKE_CASE | `MAX_UPLOAD_SIZE` |
-| Variables | camelCase | `projectList`, `isLoading` |
+| Type               | Convention           | Example                         |
+| ------------------ | -------------------- | ------------------------------- |
+| Files (utils)      | kebab-case           | `utils.ts`, `date-formatter.ts` |
+| Files (components) | PascalCase           | `Button.tsx`, `HeroSection.tsx` |
+| Components         | PascalCase           | `Button`, `ProjectCard`         |
+| Functions          | camelCase            | `formatDate`, `getProjects`     |
+| Constants          | SCREAMING_SNAKE_CASE | `MAX_UPLOAD_SIZE`               |
+| Variables          | camelCase            | `projectList`, `isLoading`      |
 
 ### Formatting (Prettier)
 
@@ -155,6 +155,7 @@ npx shadcn@latest add button
 ```
 
 Key patterns:
+
 - Use `data-slot` attribute for component identification
 - Use `data-variant` and `data-size` for styling variants
 - Icons: use `data-icon` attribute for icon positioning
@@ -216,12 +217,12 @@ Run `npx shadcn@latest docs <component>` for component documentation.
 
 ## Quick Reference
 
-| Task | Command |
-|------|---------|
-| Start dev | `npm run dev` |
-| Build | `npm run build` |
-| Lint | `npm run lint` |
-| Format | `npm run format` |
-| Add component | `npx shadcn@latest add [component]` |
-| Generate DB migration | `npx drizzle-kit generate` |
-| Push DB changes | `npx drizzle-kit push` |
+| Task                  | Command                             |
+| --------------------- | ----------------------------------- |
+| Start dev             | `npm run dev`                       |
+| Build                 | `npm run build`                     |
+| Lint                  | `npm run lint`                      |
+| Format                | `npm run format`                    |
+| Add component         | `npx shadcn@latest add [component]` |
+| Generate DB migration | `npx drizzle-kit generate`          |
+| Push DB changes       | `npx drizzle-kit push`              |

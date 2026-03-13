@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
     || request.cookies.get("__Secure-next-auth.session-token")?.value;
 
   if (!sessionToken && request.nextUrl.pathname.startsWith("/admin")) {
-    const loginUrl = new URL("/login", request.url);
+    const loginUrl = new URL("/auth/login", request.url);
     loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
