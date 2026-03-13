@@ -11,7 +11,7 @@ export default async function AdminPage() {
   const session = await auth();
 
   if (!session) {
-    redirect("/auth/login");
+    redirect("/login");
   }
 
   return (
@@ -20,9 +20,7 @@ export default async function AdminPage() {
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              {session.user?.email}
-            </span>
+            <span className="text-sm text-muted-foreground">{session.user?.email}</span>
             <form
               action={async () => {
                 "use server";

@@ -26,6 +26,7 @@ export const profiles = sqliteTable("profiles", {
   bio: text("bio"),
   shortBio: text("short_bio"),
   avatar: text("avatar"),
+  avatarPublicId: text("avatar_public_id"),
   location: text("location"),
   website: text("website"),
   github: text("github"),
