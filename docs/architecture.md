@@ -598,7 +598,6 @@ A file or component should not be too large. Separate into independent files:
 app/(auth)/login/page.tsx
 ├── Schema Zod
 ├── LoginForm
-├── LoginFormFallback
 └── LoginPage
 ```
 

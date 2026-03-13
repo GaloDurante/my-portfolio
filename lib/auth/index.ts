@@ -1,11 +1,13 @@
-import { eq } from "drizzle-orm";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { eq } from "drizzle-orm";
 import { compare } from "bcrypt";
 import db from "@/db";
+import { authConfig } from "@/lib/auth/config";
 import { users } from "@/db/schema";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -57,11 +59,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session;
     },
-  },
-  pages: {
-    signIn: "/auth/login",
-  },
-  session: {
-    strategy: "jwt",
   },
 });
