@@ -2,7 +2,7 @@ import { hash } from "bcrypt";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import db from "@/db";
-import { users } from "@/db/schema";
+import { user } from "@/db/schema";
 
 export async function POST(request: Request) {
   try {
@@ -10,46 +10,29 @@ export async function POST(request: Request) {
     const { email, password, name } = body;
 
     if (!email || !password) {
-      return NextResponse.json(
-        { error: "Email and password are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
-    const existingUser = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, email))
-      .limit(1);
+    const existingUser = await db.select().from(user).where(eq(user.email, email)).limit(1);
 
     if (existingUser.length > 0) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: "User already exists" }, { status: 409 });
     }
 
     const passwordHash = await hash(password, 12);
 
     const userId = crypto.randomUUID();
 
-    await db.insert(users).values({
+    await db.insert(user).values({
       id: userId,
       email,
       passwordHash,
       name: name || null,
-      role: "owner",
     });
 
-    return NextResponse.json(
-      { message: "User created successfully", userId },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "User created successfully", userId }, { status: 201 });
   } catch (error) {
     console.error("Registration error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

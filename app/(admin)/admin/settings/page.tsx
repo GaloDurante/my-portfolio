@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { AvatarUploader } from "@/components/admin/AvatarUploader";
 
 import db from "@/db";
-import { profiles } from "@/db/schema";
+import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const [profile] = await db.select().from(profiles).where(eq(profiles.userId, session.user.id)).limit(1);
+  const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   return (
     <div className="min-h-screen bg-zinc-50 p-8 dark:bg-black">
@@ -31,7 +31,7 @@ export default async function SettingsPage() {
 
           <p className="mb-6 text-muted-foreground">Upload a profile picture to personalize your account.</p>
 
-          <AvatarUploader value={profile?.avatar} />
+          <AvatarUploader value={currentUser?.avatar} />
         </div>
       </div>
     </div>

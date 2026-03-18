@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { compare } from "bcrypt";
 import db from "@/db";
 import { authConfig } from "@/lib/auth/config";
-import { users } from "@/db/schema";
+import { user } from "@/db/schema";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -23,23 +23,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const email = credentials.email as string;
         const password = credentials.password as string;
 
-        const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
-        const user = userList[0];
+        const userList = await db.select().from(user).where(eq(user.email, email)).limit(1);
+        const currentUser = userList[0];
 
-        if (!user) {
+        if (!currentUser) {
           return null;
         }
 
-        const isValid = await compare(password, user.passwordHash);
+        const isValid = await compare(password, currentUser.passwordHash);
         if (!isValid) {
           return null;
         }
 
         return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
+          id: currentUser.id,
+          email: currentUser.email,
+          name: currentUser.name,
         };
       },
     }),
@@ -48,14 +47,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.role = token.role as string;
       }
       return session;
     },

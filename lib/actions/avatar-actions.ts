@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import db from "@/db";
-import { profiles } from "@/db/schema";
+import { user } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { uploadImage, deleteImage } from "@/lib/cloudinary";
 
@@ -30,29 +30,22 @@ export async function uploadAvatar(formData: FormData) {
 
   const userId = session.user.id;
 
-  const [profile] = await db.select().from(profiles).where(eq(profiles.userId, userId)).limit(1);
+  const [currentUser] = await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
-  if (profile?.avatarPublicId) {
-    await deleteImage(profile.avatarPublicId);
+  if (!currentUser) throw new Error("User not found");
+
+  if (currentUser.avatarPublicId) {
+    await deleteImage(currentUser.avatarPublicId);
   }
 
-  if (profile) {
-    await db
-      .update(profiles)
-      .set({
-        avatar: result.secure_url,
-        avatarPublicId: result.public_id,
-        updatedAt: new Date(),
-      })
-      .where(eq(profiles.userId, userId));
-  } else {
-    await db.insert(profiles).values({
-      id: crypto.randomUUID(),
-      userId,
+  await db
+    .update(user)
+    .set({
       avatar: result.secure_url,
       avatarPublicId: result.public_id,
-    });
-  }
+      updatedAt: new Date(),
+    })
+    .where(eq(user.id, userId));
 
   return {
     url: result.secure_url,
@@ -68,20 +61,20 @@ export async function deleteAvatar() {
 
   const userId = session.user.id;
 
-  const [profile] = await db.select().from(profiles).where(eq(profiles.userId, userId)).limit(1);
+  const [currentUser] = await db.select().from(user).where(eq(user.id, userId)).limit(1);
 
-  if (!profile) return;
+  if (!currentUser) throw new Error("User not found");
 
-  if (profile.avatarPublicId) {
-    await deleteImage(profile.avatarPublicId);
+  if (currentUser.avatarPublicId) {
+    await deleteImage(currentUser.avatarPublicId);
   }
 
   await db
-    .update(profiles)
+    .update(user)
     .set({
       avatar: null,
       avatarPublicId: null,
       updatedAt: new Date(),
     })
-    .where(eq(profiles.userId, userId));
+    .where(eq(user.id, userId));
 }

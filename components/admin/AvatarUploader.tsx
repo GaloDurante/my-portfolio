@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useRef } from "react";
+import { useRouter } from "next/navigation";
 import { uploadAvatar, deleteAvatar } from "@/lib/actions/avatar-actions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Upload, Trash2, Loader2 } from "lucide-react";
+import { Upload, Trash2, User } from "lucide-react";
 
 interface Props {
   value?: string | null;
@@ -13,42 +14,46 @@ interface Props {
 
 export function AvatarUploader({ value }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-  const [preview, setPreview] = useState<string | null>(value ?? null);
-
-  function handleFile(file: File) {
+  async function handleFile(file: File) {
     const formData = new FormData();
     formData.append("file", file);
 
-    startTransition(async () => {
-      try {
-        const result = await uploadAvatar(formData);
-        setPreview(result.url);
-        toast.success("Avatar updated");
-      } catch {
-        toast.error("Upload failed");
-      }
-    });
+    try {
+      await uploadAvatar(formData);
+      toast.success("Avatar updated");
+      router.refresh();
+    } catch {
+      toast.error("Upload failed");
+    }
   }
 
-  function handleRemove() {
-    startTransition(async () => {
-      try {
-        await deleteAvatar();
-        setPreview(null);
-        toast.success("Avatar removed");
-      } catch {
-        toast.error("Failed to remove avatar");
-      }
-    });
+  async function handleRemove() {
+    try {
+      await deleteAvatar();
+      toast.success("Avatar removed");
+      router.refresh();
+    } catch {
+      toast.error("Failed to remove avatar");
+    }
   }
 
   return (
     <div className="flex items-center gap-6">
-      <Avatar className="size-24">
-        {preview ? <AvatarImage src={preview} /> : <AvatarFallback>U</AvatarFallback>}
-      </Avatar>
+      {value ? (
+        <Avatar className="size-24">
+          <AvatarImage src={value} />
+
+          <AvatarFallback>
+            <User />
+          </AvatarFallback>
+        </Avatar>
+      ) : (
+        <div className="size-24 rounded-full bg-muted flex items-center justify-center border">
+          <User className="text-muted-foreground" />
+        </div>
+      )}
 
       <input
         type="file"
@@ -61,21 +66,15 @@ export function AvatarUploader({ value }: Props) {
         }}
       />
 
-      <Button onClick={() => inputRef.current?.click()} disabled={isPending}>
-        {isPending ? (
-          <Loader2 className="animate-spin size-4" />
-        ) : (
-          <>
-            <Upload className="size-4 mr-2" />
-            Upload
-          </>
-        )}
-      </Button>
-
-      {preview && (
-        <Button variant="destructive" onClick={handleRemove} disabled={isPending}>
+      {value ? (
+        <Button variant="destructive" onClick={handleRemove}>
           <Trash2 className="size-4 mr-2" />
           Remove
+        </Button>
+      ) : (
+        <Button onClick={() => inputRef.current?.click()}>
+          <Upload className="size-4 mr-2" />
+          Upload image
         </Button>
       )}
     </div>
