@@ -31,8 +31,8 @@ This document decomposes the project into small, actionable tasks organized by p
 
 ### 2.1 Auth Configuration
 
-- [x] **2.1.1** Create `lib/auth.ts` - NextAuth config with Credentials provider
-- [x] **2.1.2** Create `types/next-auth.d.ts` - extend session types
+- [x] **2.1.1** Create `lib/auth/config.ts` - base NextAuth config
+- [x] **2.1.2** Create `lib/auth/index.ts` - NextAuth with Credentials provider + callbacks
 - [x] **2.1.3** Create `app/api/auth/[...nextauth]/route.ts` - auth handlers
 
 ### 2.2 Registration
@@ -62,7 +62,8 @@ This document decomposes the project into small, actionable tasks organized by p
 
 ### 3.3 Upload Component
 
-- [x] **3.3.1** Create `components/admin/avatar-uploader.tsx` - avatar upload widget
+- [x] **3.3.1** Create components to manage avatar upload widget
+- [x] **3.3.2** Create `components/admin/settings/RemoveImageButton.tsx` and `components/admin/settings/UploadImageButton.tsx` to handle buttons logic.
 
 ---
 
@@ -70,17 +71,24 @@ This document decomposes the project into small, actionable tasks organized by p
 
 Install and configure shadcn components:
 
-- [ ] **4.1** `npx shadcn@latest add input`
-- [ ] **4.2** `npx shadcn@latest add textarea`
+- [x] **4.1** `npx shadcn@latest add input`
+- [x] **4.2** `npx shadcn@latest add textarea`
 - [ ] **4.3** `npx shadcn@latest add select`
-- [ ] **4.4** `npx shadcn@latest add card`
-- [ ] **4.5** `npx shadcn@latest add dialog`
+- [x] **4.4** `npx shadcn@latest add card`
+- [x] **4.5** `npx shadcn@latest add dialog`
 - [ ] **4.6** `npx shadcn@latest add form`
-- [ ] **4.7** `npx shadcn@latest add label`
-- [ ] **4.8** `npx shadcn@latest add avatar`
-- [ ] **4.9** `npx shadcn@latest add switch`
-- [ ] **4.10** `npx shadcn@latest add badge`
+- [x] **4.7** `npx shadcn@latest add label`
+- [x] **4.8** `npx shadcn@latest add avatar`
+- [x] **4.9** `npx shadcn@latest add switch`
+- [x] **4.10** `npx shadcn@latest add badge`
 - [ ] **4.11** `npx shadcn@latest add table`
+- [x] **4.12** `npx shadcn@latest add alert-dialog`
+- [x] **4.13** `npx shadcn@latest add separator`
+- [x] **4.14** `npx shadcn@latest add sonner`
+- [x] **4.15** Create `components/ui/field.tsx` - field composition components
+- [x] **4.16** Create `components/ui/input-group.tsx` - input with addons
+- [x] **4.17** Create `components/ui/spinner.tsx` - loading spinner
+
 
 ---
 
@@ -94,28 +102,34 @@ Install and configure shadcn components:
 
 ### 5.2 Dashboard
 
-- [ ] **5.2.1** Create `app/(admin)/admin/page.tsx` - stats overview
+- [x] **5.2.1** Create `app/(admin)/admin/page.tsx` - stats overview
 
 ### 5.3 Profile Management
 
 - [ ] **5.3.1** Create `components/admin/profile-form.tsx` - profile editing form
-- [ ] **5.3.2** Create `app/(admin)/admin/profile/page.tsx` - profile page
+- [ ] **5.3.2** Add Zod validation schemas to all POST/PUT routes
+- [ ] **5.3.3** Add error handling and proper HTTP status codes
+- [ ] **5.3.4** Create `app/(admin)/admin/profile/page.tsx` - profile page
 
 ### 5.4 Projects Management
 
 - [ ] **5.4.1** Create `components/admin/project-list.tsx` - projects table
 - [ ] **5.4.2** Create `components/admin/project-form.tsx` - create/edit form
-- [ ] **5.4.3** Create `app/(admin)/admin/projects/page.tsx` - projects page
+- [ ] **5.4.3** Add Zod validation schemas to all POST/PUT routes
+- [ ] **5.4.4** Add error handling and proper HTTP status codes
+- [ ] **5.4.5** Create `app/(admin)/admin/projects/page.tsx` - projects page
 
 ### 5.5 Technologies Management
 
 - [ ] **5.5.1** Create `components/admin/technology-list.tsx` - technologies table
 - [ ] **5.5.2** Create `components/admin/technology-form.tsx` - create/edit form
-- [ ] **5.5.3** Create `app/(admin)/admin/technologies/page.tsx` - technologies page
+- [ ] **5.5.3** Add Zod validation schemas to all POST/PUT routes
+- [ ] **5.5.4** Add error handling and proper HTTP status codes
+- [ ] **5.5.5** Create `app/(admin)/admin/technologies/page.tsx` - technologies page
 
 ### 5.6 Settings
 
-- [ ] **5.6.1** Create `app/(admin)/admin/settings/page.tsx` - account settings
+- [x] **5.6.1** Create `app/(admin)/admin/settings/page.tsx` - account settings
 
 ---
 
@@ -123,7 +137,7 @@ Install and configure shadcn components:
 
 ### 6.1 Layout & Structure
 
-- [ ] **6.1.1** Create `app/(public)/layout.tsx` - public layout wrapper
+- [x] **6.1.1** Root layout already handles public layout (`app/layout.tsx`)
 
 ### 6.2 Sections
 
@@ -165,11 +179,6 @@ Install and configure shadcn components:
 
 - [ ] **7.4.1** Create `app/api/admin/technologies/route.ts` - GET all + POST create
 - [ ] **7.4.2** Create `app/api/admin/technologies/[id]/route.ts` - PUT update + DELETE
-
-### 7.5 Validation & Error Handling
-
-- [ ] **7.5.1** Add Zod validation schemas to all POST/PUT routes
-- [ ] **7.5.2** Add error handling and proper HTTP status codes
 
 ---
 
@@ -245,15 +254,15 @@ npm run build                # Production build
 | Feature           | Location             |
 | ----------------- | -------------------- |
 | Database Schema   | `db/schema.ts`       |
-| Auth Config       | `lib/auth.ts`        |
-| Cloudinary        | `lib/cloudinary.ts`  |
-| Middleware        | `middleware.ts`      |
-| Public API        | `app/api/public/`    |
-| Admin API         | `app/api/admin/`     |
-| Admin Pages       | `app/(admin)/admin/` |
-| Public Components | `components/public/` |
-| Admin Components  | `components/admin/`  |
-| UI Components     | `components/ui/`     |
+| Auth Config       | `lib/auth/config.ts` + `lib/auth/index.ts` |
+| Cloudinary        | `lib/cloudinary.ts`   |
+| Middleware        | `middleware.ts`       |
+| Login Form        | `app/(auth)/login/LoginForm.tsx` |
+| Admin Pages       | `app/(admin)/admin/`  |
+| Settings Page     | `app/(admin)/admin/settings/page.tsx` |
+| Admin Components  | `components/admin/`   |
+| UI Components     | `components/ui/`      |
+| Zod Schemas       | `lib/schemas/`        |
 
 ---
 

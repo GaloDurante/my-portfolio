@@ -43,7 +43,7 @@ export function RemoveImageButton() {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="destructive">
-          <Trash2 className="size-4 mr-2" />
+          <Trash2 className="size-4" data-icon="inline-start" />
           Remove
         </Button>
       </AlertDialogTrigger>

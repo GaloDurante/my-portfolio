@@ -171,7 +171,6 @@ Key patterns:
 ### Database (Drizzle ORM)
 
 - Schemas in `db/schema.ts`
-- Migrations in `drizzle/` directory
 - Access via `db` singleton from `db/index.ts`
 - Use `.env` for credentials; never commit secrets
 
@@ -179,18 +178,22 @@ Key patterns:
 
 ```
 ├── app/                    # Next.js App Router
-│   ├── (admin)/           # Protected admin routes
-│   ├── api/               # API routes
+│   ├── (admin)/admin/    # Protected admin pages
+│   ├── (auth)/login/     # Login page
+│   ├── api/auth/         # Auth API routes
 │   ├── layout.tsx        # Root layout
 │   └── page.tsx          # Public home page
-├── components/           # React components
+├── components/            # React components
 │   ├── ui/               # shadcn/ui components
-│   └── admin/           # Admin-specific components
-├── db/                   # Drizzle schema & connection
-├── lib/                  # Utilities (utils.ts, auth.ts, cloudinary.ts)
-├── public/               # Static assets
-├── docs/                 # Documentation (PRD.md)
-└── .env                  # Environment variables
+│   └── admin/            # Admin-specific components
+├── db/                    # Drizzle schema & connection
+├── lib/                   # Utilities
+│   ├── auth/              # NextAuth config + index
+│   ├── actions/          # Server actions
+│   └── schemas/          # Zod validation schemas
+├── .agents/skills/       # Agent skills
+├── docs/                  # Documentation
+└── .env                   # Environment variables
 ```
 
 ## Git Conventions
@@ -207,13 +210,13 @@ Key patterns:
 - Use descriptive commit messages
 - Never commit `.env` files or secrets
 
-## Agent Skills
+## Agent Skills (MANDATORY)
 
-Custom agent skills in `.agents/skills/`:
+**IMPORTANT: Before writing or modifying ANY code, you MUST load the relevant skill(s):**
 
-- **shadcn**: Detailed rules for shadcn/ui. See `.agents/skills/shadcn/SKILL.md`
+- **shadcn**: Required for ANY UI work — shadcn/ui components, styling, forms, icons. See `.agents/skills/shadcn/SKILL.md`
 
-Run `npx shadcn@latest docs <component>` for component documentation.
+Use the `skill` tool to load skills before starting code tasks. Run `npx shadcn@latest docs <component>` for component documentation.
 
 ## Quick Reference
 

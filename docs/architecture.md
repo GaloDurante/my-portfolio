@@ -39,20 +39,23 @@ users
 
 #### Profiles Table
 
+Profile fields are stored directly in the `user` table (not a separate table):
+
 ```
-profiles
+user (with profile fields)
 ├── id              (uuid, primary key)
-├── userId          (uuid, foreign key → users.id)
+├── email           (string, unique)
+├── passwordHash    (string)
+├── name            (string, nullable)
 ├── title           (string, nullable)
 ├── bio             (text, nullable)
 ├── shortBio        (string, nullable)
 ├── avatar          (string, nullable) - Cloudinary URL
+├── avatarPublicId  (string, nullable) - Cloudinary public ID
 ├── location        (string, nullable)
 ├── website         (string, nullable)
 ├── github          (string, nullable)
 ├── linkedin        (string, nullable)
-├── twitter         (string, nullable)
-├── resumeUrl       (string, nullable)
 ├── createdAt       (timestamp)
 └── updatedAt       (timestamp)
 ```
@@ -98,19 +101,15 @@ technologies
 
 #### Junction Table
 
-```
-projectTechnologies
-├── projectId       (uuid, foreign key → projects.id)
-└── technologyId    (uuid, foreign key → technologies.id)
-```
+There is **no junction table**. Technologies on a project are stored as a JSON array in the `technologies` field on the `projects` table.
 
 ### 1.3 Relationships
 
 | Relationship           | Type         | Description                              |
 | ---------------------- | ------------ | ---------------------------------------- |
-| User → Profile         | One-to-One   | Each user has one profile                |
-| Project → Technologies | Many-to-Many | Projects use multiple technologies       |
-| Technology → Projects  | Many-to-Many | Technologies appear in multiple projects |
+| User → Projects        | One-to-Many  | Each user owns multiple projects         |
+| User → Technologies    | One-to-Many  | Each user owns multiple technologies     |
+| Project → Technologies | JSON Array   | Technologies stored as JSON on project   |
 
 ### 1.4 Database Files
 
@@ -118,7 +117,7 @@ projectTechnologies
 | ---------------- | ----------------------------- |
 | `db/index.ts`    | Database connection singleton |
 | `db/schema.ts`   | All table definitions         |
-| `db/migrations/` | Drizzle migration files       |
+| `drizzle/`       | Drizzle migration files       |
 
 ---
 
@@ -164,27 +163,24 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function uploadImage(file: File, folder: string) {
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader
-      .upload_stream({ folder, resource_type: "image" }, (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
-      })
-      .end(buffer);
-  });
+export interface UploadResult {
+  public_id: string;
+  secure_url: string;
+  width: number;
+  height: number;
+  format: string;
+  bytes: number;
 }
 
-export function getOptimizedUrl(publicId: string, options?: { width?: number; height?: number }) {
-  return cloudinary.url(publicId, {
-    fetch_format: "auto",
-    quality: "auto",
-    ...options,
-  });
-}
+export async function uploadImage(
+  file: File,
+  folder: string,
+  options?: { width?: number; height?: number; crop?: string; maxBytes?: number; publicId?: string }
+): Promise<UploadResult>
+
+export function getOptimizedUrl(publicId: string, options?: { width?: number; height?: number; crop?: string }): string
+
+export function deleteImage(publicId: string): Promise<{ result: string }>
 ```
 
 ### 2.5 Folder Structure
@@ -295,16 +291,32 @@ All routes under `/admin` automatically require authentication.
 
 ### 4.5 Auth Configuration
 
+NextAuth v5 splits configuration into two files:
+
 ```typescript
-// lib/auth.ts
-import { NextAuthOptions } from "next-auth";
+// lib/auth/config.ts
+import Credentials from "next-auth/providers/credentials";
+import type { NextAuthConfig } from "next-auth";
+
+export const authConfig = {
+  providers: [Credentials({})],
+  pages: { signIn: "/login" },
+  session: { strategy: "jwt" },
+} satisfies NextAuthConfig;
+```
+
+```typescript
+// lib/auth/index.ts
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
-import { db } from "@/db";
-import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { authConfig } from "@/lib/auth/config";
+import db from "@/db";
+import { user } from "@/db/schema";
 
-export const authOptions: NextAuthOptions = {
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -313,50 +325,54 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
-        const user = await db.query.users.findFirst({
-          where: eq(users.email, credentials.email),
-        });
+        const email = credentials.email as string;
+        const password = credentials.password as string;
 
-        if (!user) return null;
+        const [currentUser] = await db.select().from(user).where(eq(user.email, email)).limit(1);
+        if (!currentUser) return null;
 
-        const isValid = await compare(credentials.password, user.passwordHash);
+        const isValid = await compare(password, currentUser.passwordHash);
         if (!isValid) return null;
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
+        return { id: currentUser.id, email: currentUser.email, name: currentUser.name };
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.role = user.role;
-      }
+      if (user) token.id = user.id;
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.sub!;
-        session.user.role = token.role;
-      }
+      if (session.user) session.user.id = token.id as string;
       return session;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
-  session: {
-    strategy: "jwt",
-  },
-};
+});
+```
+
+---
+
+### 4.6 Middleware (NextAuth v5)
+
+```typescript
+// middleware.ts
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/auth/config";
+
+export const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
+  if (!req.auth && req.nextUrl.pathname.startsWith("/admin")) {
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    return Response.redirect(loginUrl);
+  }
+});
+
+export const config = { matcher: ["/admin/:path*"] };
 ```
 
 ---
@@ -393,6 +409,84 @@ AUTH_SECRET=your-random-32-character-secret-here
 
 ## 6. File Structure
 
+```
+next-portfolio/
+├── .env                          # Environment variables (not committed)
+├── .eslint.config.mjs            # ESLint configuration
+├── .gitignore                   # Git ignore rules
+├── AGENTS.md                    # Developer guidelines
+├── components.json              # shadcn configuration
+├── drizzle.config.ts            # Drizzle configuration
+├── next.config.ts               # Next.js configuration
+├── package.json                # Dependencies
+├── tsconfig.json                # TypeScript configuration
+│
+├── app/                         # Next.js App Router
+│   ├── globals.css              # Global styles (Tailwind v4)
+│   ├── layout.tsx               # Root layout
+│   ├── page.tsx                # Public home page
+│   ├── (admin)/                # Admin route group (protected)
+│   │   └── admin/
+│   │       ├── page.tsx         # Admin dashboard
+│   │       └── settings/
+│   │           └── page.tsx     # Settings page
+│   ├── (auth)/                 # Auth route group
+│   │   └── login/
+│   │       ├── page.tsx         # Login page (with Suspense)
+│   │       └── LoginForm.tsx    # Login form component
+│   └── api/                    # API routes
+│       ├── auth/[...nextauth]/  # NextAuth handlers
+│       └── auth/register/       # Registration endpoint
+│           └── route.ts
+│
+├── components/
+│   ├── ui/                     # shadcn/ui components
+│   │   ├── alert-dialog.tsx
+│   │   ├── avatar.tsx
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── dialog.tsx
+│   │   ├── field.tsx
+│   │   ├── input-group.tsx
+│   │   ├── input.tsx
+│   │   ├── label.tsx
+│   │   ├── separator.tsx
+│   │   ├── sonner.tsx
+│   │   ├── spinner.tsx
+│   │   └── textarea.tsx
+│   ├── providers.tsx           # React providers
+│   ├── theme-provider.tsx       # Theme provider
+│   └── admin/                   # Admin-specific components
+│       └── settings/
+│           ├── UploadImageButton.tsx
+│           └── RemoveImageButton.tsx
+│
+├── db/                         # Database layer
+│   ├── index.ts                # Database connection singleton
+│   └── schema.ts               # Table definitions
+│
+├── docs/
+│   ├── PRD.md                  # Product Requirements
+│   ├── architecture.md        # This file
+│   └── tasks.md               # Development roadmap
+│
+├── drizzle/                    # Drizzle migration files
+│
+├── lib/                       # Utilities & configurations
+│   ├── utils.ts               # cn() helper
+│   ├── auth/
+│   │   ├── config.ts          # Base NextAuth config
+│   │   └── index.ts           # Full auth with providers + callbacks
+│   ├── cloudinary.ts          # Cloudinary helpers
+│   ├── schemas/               # Zod validation schemas
+│   │   └── login.ts
+│   └── actions/               # Server actions
+│       └── avatar-actions.ts
+│
+├── middleware.ts              # Route protection
+│
+└── .agents/skills/            # Agent skills
+    └── shadcn/
 ```
 next-portfolio/
 ├── .env                          # Environment variables (not committed)
@@ -501,49 +595,57 @@ See also: The font strategy aligns with the global typography approach described
 
 Located in `components/ui/`:
 
-| Component      | Purpose                                                     |
-| -------------- | ----------------------------------------------------------- |
-| `button.tsx`   | Button with variants (default, outline, ghost, destructive) |
-| `input.tsx`    | Text input                                                  |
-| `textarea.tsx` | Multi-line text input                                       |
-| `select.tsx`   | Dropdown select                                             |
-| `card.tsx`     | Content container                                           |
-| `dialog.tsx`   | Modal dialog                                                |
-| `form.tsx`     | Form wrapper                                                |
-| `label.tsx`    | Form label                                                  |
-| `avatar.tsx`   | User avatar                                                 |
-| `switch.tsx`   | Toggle switch                                               |
-| `badge.tsx`    | Status/tag badge                                            |
+| Component         | Status | Purpose                                    |
+| ----------------- | ------ | ----------------------------------------- |
+| `button.tsx`      | ✅     | Button with variants (default, outline, ghost, destructive) |
+| `input.tsx`       | ✅     | Text input                                |
+| `textarea.tsx`    | ✅     | Multi-line text input                     |
+| `select.tsx`      | ❌     | Dropdown select — NOT installed           |
+| `card.tsx`        | ✅     | Content container                         |
+| `dialog.tsx`      | ✅     | Modal dialog                              |
+| `form.tsx`        | ❌     | Form wrapper — NOT installed              |
+| `label.tsx`       | ✅     | Form label                                |
+| `avatar.tsx`      | ✅     | User avatar                               |
+| `switch.tsx`      | ✅     | Toggle switch                             |
+| `badge.tsx`       | ✅     | Status/tag badge                          |
+| `alert-dialog.tsx`| ✅     | Confirmation dialogs                      |
+| `field.tsx`       | ✅     | Form field composition                    |
+| `input-group.tsx` | ✅     | Input with addons                         |
+| `separator.tsx`   | ✅     | Horizontal divider                        |
+| `sonner.tsx`      | ✅     | Toast notifications                       |
+| `spinner.tsx`     | ✅     | Loading spinner                          |
 
 ### 7.2 Admin Components
 
 Located in `components/admin/`:
 
-| Component             | Purpose                     |
-| --------------------- | --------------------------- |
-| `admin-sidebar.tsx`   | Navigation sidebar          |
-| `admin-header.tsx`    | Top bar with user info      |
-| `project-list.tsx`    | Projects table/list         |
-| `project-form.tsx`    | Create/edit project form    |
-| `technology-list.tsx` | Technologies table/list     |
-| `technology-form.tsx` | Create/edit technology form |
-| `profile-form.tsx`    | Profile edit form           |
-| `media-uploader.tsx`  | Cloudinary upload widget    |
+| Component                    | Status | Purpose                          |
+| ---------------------------- | ------ | -------------------------------- |
+| `admin-sidebar.tsx`          | ❌     | Navigation sidebar — NOT created |
+| `admin-header.tsx`           | ❌     | Top bar with user info — NOT created |
+| `project-list.tsx`          | ❌     | Projects table — NOT created     |
+| `project-form.tsx`          | ❌     | Create/edit project — NOT created |
+| `technology-list.tsx`        | ❌     | Technologies table — NOT created |
+| `technology-form.tsx`        | ❌     | Create/edit technology — NOT created |
+| `profile-form.tsx`           | ❌     | Profile edit form — NOT created |
+| `media-uploader.tsx`         | ❌     | Cloudinary upload — NOT created |
+| `settings/UploadImageButton.tsx` | ✅  | Avatar upload dialog button    |
+| `settings/RemoveImageButton.tsx` | ✅ | Avatar remove confirmation   |
 
 ### 7.3 Public Components
 
-Located in `components/public/`:
+Located in `components/public/` (NOT YET CREATED):
 
-| Component                  | Purpose                 |
-| -------------------------- | ----------------------- |
-| `hero-section.tsx`         | Landing hero area       |
-| `about-section.tsx`        | About/bio section       |
-| `projects-section.tsx`     | Projects showcase       |
-| `project-card.tsx`         | Individual project card |
-| `technologies-section.tsx` | Tech stack display      |
-| `tech-badge.tsx`           | Technology tag          |
-| `contact-section.tsx`      | Contact information     |
-| `footer.tsx`               | Site footer             |
+| Component                  | Status | Purpose                 |
+| -------------------------- | ------ | ----------------------- |
+| `hero-section.tsx`         | ❌     | Landing hero area      |
+| `about-section.tsx`        | ❌     | About/bio section       |
+| `projects-section.tsx`      | ❌     | Projects showcase       |
+| `project-card.tsx`         | ❌     | Individual project card |
+| `technologies-section.tsx` | ❌     | Tech stack display      |
+| `tech-badge.tsx`            | ❌     | Technology tag          |
+| `contact-section.tsx`       | ❌     | Contact information     |
+| `footer.tsx`                | ❌     | Site footer             |
 
 ### 7.4 Component Patterns
 
@@ -703,10 +805,11 @@ npx shadcn@latest add button
 
 ### Auth Setup
 
-1. Configure `lib/auth.ts` with NextAuth options
-2. Create API route at `app/api/auth/[...nextauth]/route.ts`
-3. Add middleware for route protection
-4. Set `AUTH_SECRET` in environment
+1. Configure `lib/auth/config.ts` with base NextAuth config
+2. Configure `lib/auth/index.ts` with full auth options + credentials provider
+3. Create API route at `app/api/auth/[...nextauth]/route.ts`
+4. Configure `middleware.ts` for route protection
+5. Set `AUTH_SECRET` in environment
 
 ### Cloudinary Setup
 
