@@ -24,7 +24,7 @@ export default async function AdminPage() {
   const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
 
   return (
-    <div className="min-h-screen bg-zinc-50 p-8 dark:bg-black">
+    <div className="min-h-screen p-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>

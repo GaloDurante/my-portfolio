@@ -53,7 +53,7 @@ export default function LoginForm() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center p-6 bg-zinc-50 dark:bg-black">
+    <section className="min-h-screen flex items-center justify-center p-8">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="mb-4 inline-flex size-12 items-center justify-center rounded-full bg-primary/10">
@@ -104,7 +104,7 @@ export default function LoginForm() {
               ) : (
                 <>
                   Sign in
-                  <ArrowRight className="ml-2 size-4" />
+                  <ArrowRight data-icon="inline-end" />
                 </>
               )}
             </Button>

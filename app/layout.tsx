@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -21,12 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html suppressHydrationWarning lang="en" className={inter.className}>
       <body className="antialiased">
-        <Providers>
-          <main>{children}</main>
-          <Toaster position="top-center" richColors />
-        </Providers>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <Providers>
+            <main className="bg-zinc-50 dark:bg-background">{children}</main>
+            <Toaster position="top-center" richColors />
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );
