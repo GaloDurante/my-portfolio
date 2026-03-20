@@ -54,15 +54,15 @@ This document decomposes the project into small, actionable tasks organized by p
 
 ### 3.1 Configuration
 
-- [ ] **3.1.1** Configure Cloudinary in `.env` (already done: `CLOUDINARY_URL`)
+- [x] **3.1.1** Configure Cloudinary in `.env` (already done: `CLOUDINARY_URL`)
 
 ### 3.2 Library
 
-- [ ] **3.2.1** Create `lib/cloudinary.ts` - config + upload helper
+- [x] **3.2.1** Create `lib/cloudinary.ts` - config + upload helper
 
 ### 3.3 Upload Component
 
-- [ ] **3.3.1** Create `components/admin/media-uploader.tsx` - upload widget
+- [x] **3.3.1** Create `components/admin/avatar-uploader.tsx` - avatar upload widget
 
 ---
 
