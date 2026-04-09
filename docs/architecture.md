@@ -427,17 +427,18 @@ next-portfolio/
 │   ├── page.tsx                # Public home page
 │   ├── (admin)/                # Admin route group (protected)
 │   │   └── admin/
+│   │       ├── layout.tsx       # Admin layout (with sidebar + header)
 │   │       ├── page.tsx         # Admin dashboard
 │   │       └── settings/
 │   │           └── page.tsx     # Settings page
 │   ├── (auth)/                 # Auth route group
 │   │   └── login/
 │   │       ├── page.tsx         # Login page (with Suspense)
-│   │       └── LoginForm.tsx    # Login form component
-│   └── api/                    # API routes
+│   │       └── LoginForm.tsx    # Login form (client)
+│   └── api/                     # API routes
 │       ├── auth/[...nextauth]/  # NextAuth handlers
-│       └── auth/register/       # Registration endpoint
-│           └── route.ts
+│       ├── admin/               # Admin API routes
+│       └── public/              # Public API routes
 │
 ├── components/
 │   ├── ui/                     # shadcn/ui components
@@ -446,88 +447,25 @@ next-portfolio/
 │   │   ├── button.tsx
 │   │   ├── card.tsx
 │   │   ├── dialog.tsx
+│   │   ├── dropdown-menu.tsx
 │   │   ├── field.tsx
 │   │   ├── input-group.tsx
 │   │   ├── input.tsx
 │   │   ├── label.tsx
 │   │   ├── separator.tsx
+│   │   ├── select.tsx
 │   │   ├── sonner.tsx
 │   │   ├── spinner.tsx
+│   │   ├── table.tsx
 │   │   └── textarea.tsx
-│   ├── providers.tsx           # React providers
-│   ├── theme-provider.tsx       # Theme provider
-│   └── admin/                   # Admin-specific components
+│   ├── providers.tsx             # React providers
+│   ├── theme-provider.tsx        # Theme provider
+│   └── admin/                    # Admin-specific components
+│       ├── admin-sidebar.tsx
+│       ├── admin-header.tsx
 │       └── settings/
 │           ├── UploadImageButton.tsx
 │           └── RemoveImageButton.tsx
-│
-├── db/                         # Database layer
-│   ├── index.ts                # Database connection singleton
-│   └── schema.ts               # Table definitions
-│
-├── docs/
-│   ├── PRD.md                  # Product Requirements
-│   ├── architecture.md        # This file
-│   └── tasks.md               # Development roadmap
-│
-├── drizzle/                    # Drizzle migration files
-│
-├── lib/                       # Utilities & configurations
-│   ├── utils.ts               # cn() helper
-│   ├── auth/
-│   │   ├── config.ts          # Base NextAuth config
-│   │   └── index.ts           # Full auth with providers + callbacks
-│   ├── cloudinary.ts          # Cloudinary helpers
-│   ├── schemas/               # Zod validation schemas
-│   │   └── login.ts
-│   └── actions/               # Server actions
-│       └── avatar-actions.ts
-│
-├── middleware.ts              # Route protection
-│
-└── .agents/skills/            # Agent skills
-    └── shadcn/
-```
-next-portfolio/
-├── .env                          # Environment variables (not committed)
-├── .eslint.config.mjs            # ESLint configuration
-├── .gitignore                   # Git ignore rules
-├── AGENTS.md                    # Developer guidelines
-├── components.json              # shadcn configuration
-├── drizzle.config.ts            # Drizzle configuration
-├── next.config.ts               # Next.js configuration
-├── package.json                 # Dependencies
-├── tsconfig.json                # TypeScript configuration
-│
-├── app/                         # Next.js App Router
-│   ├── globals.css              # Global styles (Tailwind v4)
-│   ├── layout.tsx               # Root layout
-│   ├── page.tsx                 # Public home page
-│   ├── (admin)/                 # Admin route group (protected)
-│   │   └── admin/
-│   │       ├── layout.tsx       # Admin layout (with sidebar)
-│   │       └── page.tsx         # Admin dashboard
-│   ├── (auth)/                  # Auth route group
-│   │   └── login/
-│   │       └── page.tsx         # Login page
-│   └── api/                     # API routes
-│       ├── auth/[...nextauth]/  # NextAuth handlers
-│       ├── admin/               # Admin API routes
-│       └── public/              # Public API routes
-│
-├── components/
-│   ├── ui/                      # shadcn/ui components
-│   │   ├── button.tsx
-│   │   ├── input.tsx
-│   │   └── ...
-│   ├── admin/                   # Admin-specific components
-│   │   ├── admin-sidebar.tsx
-│   │   ├── project-form.tsx
-│   │   └── technology-form.tsx
-│   └── public/                  # Public-facing components
-│       ├── hero-section.tsx
-│       ├── project-card.tsx
-│       └── tech-badge.tsx
 │
 ├── db/                          # Database layer
 │   ├── index.ts                 # Database connection
@@ -600,10 +538,10 @@ Located in `components/ui/`:
 | `button.tsx`      | ✅     | Button with variants (default, outline, ghost, destructive) |
 | `input.tsx`       | ✅     | Text input                                |
 | `textarea.tsx`    | ✅     | Multi-line text input                     |
-| `select.tsx`      | ❌     | Dropdown select — NOT installed           |
+| `select.tsx`      | ✅     | Dropdown select                           |
 | `card.tsx`        | ✅     | Content container                         |
 | `dialog.tsx`      | ✅     | Modal dialog                              |
-| `form.tsx`        | ❌     | Form wrapper — NOT installed              |
+| `form.tsx`        | ❌     | Not a CLI component — use Field + react-hook-form       |
 | `label.tsx`       | ✅     | Form label                                |
 | `avatar.tsx`      | ✅     | User avatar                               |
 | `switch.tsx`      | ✅     | Toggle switch                             |
@@ -613,7 +551,9 @@ Located in `components/ui/`:
 | `input-group.tsx` | ✅     | Input with addons                         |
 | `separator.tsx`   | ✅     | Horizontal divider                        |
 | `sonner.tsx`      | ✅     | Toast notifications                       |
-| `spinner.tsx`     | ✅     | Loading spinner                          |
+| `spinner.tsx`     | ✅     | Loading spinner                           |
+| `table.tsx`       | ✅     | Data table                                |
+| `dropdown-menu.tsx` | ✅   | Dropdown menu                             |
 
 ### 7.2 Admin Components
 
@@ -621,8 +561,8 @@ Located in `components/admin/`:
 
 | Component                    | Status | Purpose                          |
 | ---------------------------- | ------ | -------------------------------- |
-| `admin-sidebar.tsx`          | ❌     | Navigation sidebar — NOT created |
-| `admin-header.tsx`           | ❌     | Top bar with user info — NOT created |
+| `admin-sidebar.tsx`          | ✅     | Navigation sidebar (collapsible) |
+| `admin-header.tsx`           | ✅     | Top bar with user info + logout   |
 | `project-list.tsx`          | ❌     | Projects table — NOT created     |
 | `project-form.tsx`          | ❌     | Create/edit project — NOT created |
 | `technology-list.tsx`        | ❌     | Technologies table — NOT created |

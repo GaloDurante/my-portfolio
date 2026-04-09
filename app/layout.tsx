@@ -23,10 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning lang="en" className={inter.className}>
-      <body className="antialiased">
+      <body className="antialiased bg-background">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Providers>
-            <main className="bg-zinc-50 dark:bg-background">{children}</main>
+            <main>{children}</main>
             <Toaster position="top-center" richColors />
           </Providers>
         </ThemeProvider>

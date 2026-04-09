@@ -1,14 +1,11 @@
-import { auth, signOut } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User } from "lucide-react";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { getAdminDashboardData } from "@/lib/services/user";
 
-import db from "@/db";
-import { eq } from "drizzle-orm";
-import { user } from "@/db/schema";
+import Link from "next/link";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { FolderOpen, Cpu } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Admin | Portfolio Galo Durante",
@@ -21,54 +18,47 @@ export default async function AdminPage() {
     redirect("/login");
   }
 
-  const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
+  const { currentUser, projectCount, techCount } = await getAdminDashboardData({ userId: session.user.id });
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <div className="flex items-center gap-4">
-            {currentUser.avatar ? (
-              <Avatar>
-                <AvatarImage src={currentUser.avatar} />
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground mt-2">
+          {`Welcome back, ${currentUser?.name || "Admin"}. Here is a look at your current portfolio's status.`}
+        </p>
+      </div>
 
-                <AvatarFallback>
-                  <User />
-                </AvatarFallback>
-              </Avatar>
-            ) : (
-              <div className="size-8 rounded-full bg-muted flex items-center justify-center border">
-                <User className="text-muted-foreground" size={16} />
-              </div>
-            )}
-            <span className="text-sm text-muted-foreground">{session.user?.email}</span>
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <Button variant="outline" size="sm">
-                Sign out
-              </Button>
-            </form>
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="text-lg font-semibold">Projects</h3>
-            <p className="text-3xl font-bold">0</p>
-          </div>
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="text-lg font-semibold">Technologies</h3>
-            <p className="text-3xl font-bold">0</p>
-          </div>
-          <Link href={"/admin/settings"} className="rounded-lg border bg-card p-6 hover:scale-101 transition-transform">
-            <h3 className="text-lg font-semibold">Profile</h3>
-            <p className="text-sm text-muted-foreground">Customize your profile</p>
-          </Link>
-        </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Link href="/admin/projects">
+          <Card className="transition-transform hover:scale-[1.01]">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FolderOpen data-icon="inline-start" />
+                Projects
+              </CardTitle>
+              <CardDescription>Manage your portfolio projects</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{projectCount}</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/admin/technologies">
+          <Card className="transition-transform hover:scale-[1.01]">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Cpu data-icon="inline-start" />
+                Technologies
+              </CardTitle>
+              <CardDescription>Manage your tech stack</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-3xl font-bold">{techCount}</p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
     </div>
   );

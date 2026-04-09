@@ -73,21 +73,22 @@ Install and configure shadcn components:
 
 - [x] **4.1** `npx shadcn@latest add input`
 - [x] **4.2** `npx shadcn@latest add textarea`
-- [ ] **4.3** `npx shadcn@latest add select`
-- [x] **4.4** `npx shadcn@latest add card`
-- [x] **4.5** `npx shadcn@latest add dialog`
-- [ ] **4.6** `npx shadcn@latest add form`
+- [x] **4.3** `npx shadcn@latest add select`
+- [ ] **4.4** `npx shadcn@latest add form` (not a CLI component — use Field + react-hook-form pattern)
+- [x] **4.5** `npx shadcn@latest add card`
+- [x] **4.6** `npx shadcn@latest add dialog`
 - [x] **4.7** `npx shadcn@latest add label`
 - [x] **4.8** `npx shadcn@latest add avatar`
 - [x] **4.9** `npx shadcn@latest add switch`
 - [x] **4.10** `npx shadcn@latest add badge`
-- [ ] **4.11** `npx shadcn@latest add table`
+- [x] **4.11** `npx shadcn@latest add table`
 - [x] **4.12** `npx shadcn@latest add alert-dialog`
 - [x] **4.13** `npx shadcn@latest add separator`
 - [x] **4.14** `npx shadcn@latest add sonner`
-- [x] **4.15** Create `components/ui/field.tsx` - field composition components
-- [x] **4.16** Create `components/ui/input-group.tsx` - input with addons
-- [x] **4.17** Create `components/ui/spinner.tsx` - loading spinner
+- [x] **4.15** `npx shadcn@latest add dropdown-menu`
+- [x] **4.16** Create `components/ui/field.tsx` - field composition components
+- [x] **4.17** Create `components/ui/input-group.tsx` - input with addons
+- [x] **4.18** Create `components/ui/spinner.tsx` - loading spinner
 
 
 ---
@@ -96,9 +97,9 @@ Install and configure shadcn components:
 
 ### 5.1 Layout
 
-- [ ] **5.1.1** Create `app/(admin)/admin/layout.tsx` - sidebar + header wrapper
-- [ ] **5.1.2** Create `components/admin/admin-sidebar.tsx` - navigation
-- [ ] **5.1.3** Create `components/admin/admin-header.tsx` - user info + logout
+- [x] **5.1.1** Create `app/(admin)/admin/layout.tsx` - sidebar + header wrapper
+- [x] **5.1.2** Create `components/admin/admin-sidebar.tsx` - navigation + user info + theme toggle
+- [x] **5.1.3** Deleted: header within sidebar (see 5.1.2)
 
 ### 5.2 Dashboard
 
@@ -258,6 +259,9 @@ npm run build                # Production build
 | Cloudinary        | `lib/cloudinary.ts`   |
 | Middleware        | `middleware.ts`       |
 | Login Form        | `app/(auth)/login/LoginForm.tsx` |
+| Admin Layout      | `app/(admin)/admin/layout.tsx` |
+| Admin Sidebar     | `components/admin/admin-sidebar.tsx` |
+| Admin Header      | `components/admin/admin-header.tsx` |
 | Admin Pages       | `app/(admin)/admin/`  |
 | Settings Page     | `app/(admin)/admin/settings/page.tsx` |
 | Admin Components  | `components/admin/`   |
