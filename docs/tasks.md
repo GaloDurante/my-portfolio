@@ -107,10 +107,10 @@ Install and configure shadcn components:
 
 ### 5.3 Profile Management
 
-- [ ] **5.3.1** Create `components/admin/profile-form.tsx` - profile editing form
-- [ ] **5.3.2** Add Zod validation schemas to all POST/PUT routes
-- [ ] **5.3.3** Add error handling and proper HTTP status codes
-- [ ] **5.3.4** Create `app/(admin)/admin/profile/page.tsx` - profile page
+- [x] **5.3.1** Crear page `app/(admin)/admin/profile/page.tsx` - page con avatar y form
+- [ ] **5.3.2** Agregar Zod schemas para validacion de profile
+- [ ] **5.3.3** Agregar server actions para actualizar profile
+- [ ] **5.3.4** Integrar form con server actions
 
 ### 5.4 Projects Management
 
@@ -260,10 +260,11 @@ npm run build                # Production build
 | Middleware        | `middleware.ts`       |
 | Login Form        | `app/(auth)/login/LoginForm.tsx` |
 | Admin Layout      | `app/(admin)/admin/layout.tsx` |
-| Admin Sidebar     | `components/admin/admin-sidebar.tsx` |
-| Admin Header      | `components/admin/admin-header.tsx` |
-| Admin Pages       | `app/(admin)/admin/`  |
-| Settings Page     | `app/(admin)/admin/settings/page.tsx` |
+| Admin Sidebar     | `components/admin/sidebar/adminSidebar.tsx` |
+| Profile Page      | `app/(admin)/admin/profile/page.tsx` |
+| Profile Form      | `components/admin/profile/profile-form.tsx` |
+| Profile Actions   | `lib/actions/profile-actions.ts` |
+| Avatar Upload     | `components/admin/profile/UploadImageButton.tsx` |
 | Admin Components  | `components/admin/`   |
 | UI Components     | `components/ui/`      |
 | Zod Schemas       | `lib/schemas/`        |

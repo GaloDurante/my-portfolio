@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           image: currentUser?.avatar || null,
         }}
       />
-      <div className="flex flex-1 flex-col overflow-y-auto p-6">{children}</div>
+      <div className="flex flex-1 flex-col overflow-y-auto p-8">{children}</div>
     </div>
   );
 }
