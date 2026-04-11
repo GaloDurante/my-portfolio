@@ -21,3 +21,7 @@ export function applyServerValidationErrors<T extends FieldValues>(
     });
   });
 }
+
+export function setThemeCookie(value: string) {
+  document.cookie = `theme=${value}; path=/`;
+}

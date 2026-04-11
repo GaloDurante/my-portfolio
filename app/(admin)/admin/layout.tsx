@@ -1,10 +1,9 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { AdminSidebar } from "@/components/admin/sidebar/adminSidebar";
+import { cookies } from "next/headers";
 
-import db from "@/db";
-import { user } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { AdminSidebar } from "@/components/admin/sidebar/adminSidebar";
+import { getUserById } from "@/lib/services/user";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -13,7 +12,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/login");
   }
 
-  const [currentUser] = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1);
+  const currentUser = await getUserById(session.user.id);
+
+  const cookieStore = await cookies();
+  const collapsed = cookieStore.get("sidebar-collapsed")?.value === "true";
+  const themeInitial = cookieStore.get("theme")?.value || "system";
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -23,6 +26,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           email: session.user.email,
           image: currentUser?.avatar || null,
         }}
+        collapsedInitial={collapsed}
+        themeInitial={themeInitial}
       />
       <div className="flex flex-1 flex-col overflow-y-auto p-8">{children}</div>
     </div>

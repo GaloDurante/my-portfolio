@@ -1,24 +1,25 @@
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface AdminSidebarFooterProps {
   collapsed: boolean;
-  setCollapsed: (collapsed: boolean) => void;
+  onToggle: () => void;
 }
 
-export function AdminSidebarFooter({ collapsed, setCollapsed }: AdminSidebarFooterProps) {
+export function AdminSidebarFooter({ collapsed, onToggle }: AdminSidebarFooterProps) {
   return (
     <div className="px-2 pb-2">
-      <Button
-        variant="ghost"
-        size="sm"
-        className={cn("w-full", collapsed && "justify-center")}
-        onClick={() => setCollapsed(!collapsed)}
-      >
-        <ChevronLeft data-icon="inline-start" />
-        {!collapsed && <span>Collapse</span>}
+      <Button variant="ghost" size="sm" className={cn("w-full", collapsed && "justify-center")} onClick={onToggle}>
+        {collapsed ? (
+          <ChevronRight data-icon="inline-end" />
+        ) : (
+          <>
+            <ChevronLeft data-icon="inline-start" />
+            <span>Collapse</span>
+          </>
+        )}
       </Button>
     </div>
   );
