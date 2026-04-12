@@ -1,34 +1,40 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 import { useTheme } from "next-themes";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
 
 import { signOutAction } from "@/lib/actions/auth";
-import { cn, setThemeCookie } from "@/lib/utils";
+import { cn, setCustomCookie } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, FolderOpen, Cpu, User, LogOut, Moon, Sun, Monitor } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Cpu, User, LogOut, Moon, Sun, Monitor, Languages } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 
 const themeOptions = [
-  { value: "light", icon: Sun, label: "Light" },
-  { value: "dark", icon: Moon, label: "Dark" },
-  { value: "system", icon: Monitor, label: "System" },
+  { value: "light", icon: Sun },
+  { value: "dark", icon: Moon },
+  { value: "system", icon: Monitor },
 ] as const;
 
 const navItems = [
-  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "Projects", href: "/admin/projects", icon: FolderOpen },
-  { label: "Technologies", href: "/admin/technologies", icon: Cpu },
-  { label: "User Profile", href: "/admin/profile", icon: User },
+  { value: "dashboard", href: "/admin", icon: LayoutDashboard },
+  { value: "projects", href: "/admin/projects", icon: FolderOpen },
+  { value: "technologies", href: "/admin/technologies", icon: Cpu },
+  { value: "profile", href: "/admin/profile", icon: User },
 ];
+
+const languageOptions = [{ value: "en" }, { value: "es" }] as const;
 
 interface AdminSidebarBodyProps {
   collapsed: boolean;
@@ -36,6 +42,10 @@ interface AdminSidebarBodyProps {
 }
 
 export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyProps) {
+  const t = useTranslations("AdminSidebar");
+
+  const router = useRouter();
+  const locale = useLocale();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
 
@@ -44,9 +54,15 @@ export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyPr
   const currentTheme = themeOptions.find((t) => t.value === effectiveTheme);
   const CurrentIcon = currentTheme?.icon ?? Monitor;
 
-  const handleThemeChange = (value: (typeof themeOptions)[number]["value"]) => {
+  const currentLanguage = languageOptions.find((l) => l.value === locale);
+
+  const handleThemeChange = (value: string) => {
     setTheme(value);
-    setThemeCookie(value);
+    setCustomCookie("theme", value);
+  };
+
+  const handleLanguageChange = (value: string) => {
+    router.replace(pathname, { locale: value });
   };
 
   return (
@@ -69,7 +85,7 @@ export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyPr
               >
                 <Link href={item.href}>
                   <Icon data-icon="inline-start" />
-                  {!collapsed && <span>{item.label}</span>}
+                  {!collapsed && <span>{t(`nav.${item.value}`)}</span>}
                 </Link>
               </Button>
             </li>
@@ -77,10 +93,10 @@ export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyPr
         })}
       </ul>
 
-      <div className="mt-auto space-y-1">
+      <div className="mt-auto space-y-2">
         {!collapsed ? (
           <div className="flex items-center justify-between w-full gap-4 px-2">
-            <span className="text-sm font-medium">Theme</span>
+            <span className="text-sm font-medium">{t("theme.title")}</span>
             <div className="flex items-center p-1 rounded-full border">
               {themeOptions.map((option) => (
                 <Button
@@ -108,21 +124,60 @@ export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyPr
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="start">
-                {themeOptions.map((option) => {
-                  const Icon = option.icon;
+              <DropdownMenuContent className="w-48">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>{t("theme.label")}</DropdownMenuLabel>
+                  <DropdownMenuRadioGroup value={effectiveTheme} onValueChange={handleThemeChange}>
+                    {themeOptions.map((option) => {
+                      const Icon = option.icon;
 
-                  return (
-                    <DropdownMenuItem key={option.value} onClick={() => handleThemeChange(option.value)}>
-                      <Icon data-icon="inline-start" className="size-4" />
-                      {option.label}
-                    </DropdownMenuItem>
-                  );
-                })}
+                      return (
+                        <DropdownMenuRadioItem value={option.value} key={option.value}>
+                          <Icon />
+                          {t(`theme.${option.value}`)}
+                        </DropdownMenuRadioItem>
+                      );
+                    })}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         )}
+
+        <div className={cn("px-2", !collapsed && "flex items-center justify-between w-full gap-4")}>
+          {!collapsed && <span className="text-sm font-medium">{t("language.title")}</span>}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant={collapsed ? "ghost" : "outline"}
+                size="sm"
+                className={cn(!collapsed ? "justify-between" : "w-full justify-center gap-2")}
+              >
+                {collapsed ? (
+                  <Languages data-icon="inline-start" className="size-4" />
+                ) : (
+                  t(`language.${currentLanguage?.value}`)
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent className="w-52">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>{t("language.label")}</DropdownMenuLabel>
+                <DropdownMenuRadioGroup value={locale} onValueChange={handleLanguageChange}>
+                  {languageOptions.map((option) => (
+                    <DropdownMenuRadioItem key={option.value} value={option.value}>
+                      {t(`language.${option.value}`)}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
         <form action={signOutAction}>
           <Button
             variant="ghost"
@@ -130,7 +185,7 @@ export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyPr
             type="submit"
           >
             <LogOut data-icon="inline-start" />
-            {!collapsed && "Sign out"}
+            {!collapsed && t("signOut")}
           </Button>
         </form>
       </div>

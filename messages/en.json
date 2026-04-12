@@ -1,0 +1,25 @@
+{
+  "AdminSidebar": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "projects": "Projects",
+      "technologies": "Technologies",
+      "profile": "User Profile"
+    },
+    "theme": {
+      "title": "Theme",
+      "label": "Select your preferred theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "title": "Language",
+      "label": "Select your preferred language",
+      "en": "English",
+      "es": "Spanish"
+    },
+    "signOut": "Sign Out",
+    "collapse": "Collapse"
+  }
+}

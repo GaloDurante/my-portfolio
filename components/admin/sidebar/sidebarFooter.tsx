@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,8 @@ interface AdminSidebarFooterProps {
 }
 
 export function AdminSidebarFooter({ collapsed, onToggle }: AdminSidebarFooterProps) {
+  const t = useTranslations("AdminSidebar");
+
   return (
     <div className="px-2 pb-2">
       <Button variant="ghost" size="sm" className={cn("w-full", collapsed && "justify-center")} onClick={onToggle}>
@@ -17,7 +20,7 @@ export function AdminSidebarFooter({ collapsed, onToggle }: AdminSidebarFooterPr
         ) : (
           <>
             <ChevronLeft data-icon="inline-start" />
-            <span>Collapse</span>
+            <span>{t("collapse")}</span>
           </>
         )}
       </Button>
