@@ -1,19 +1,23 @@
 "use server";
 
-import { profileSchema } from "@/lib/schemas/profile";
+import { createProfileSchema } from "@/lib/schemas/profile";
 import { updateUserData } from "@/lib/services/user";
 import { AppError } from "@/lib/errors/app-error";
 import { UpdateProfileResult } from "@/lib/types/profile";
 
-export async function updateProfile(data: unknown, userId: string): Promise<UpdateProfileResult> {
-  const parsed = profileSchema.safeParse(data);
+import { getTranslations } from "next-intl/server";
 
+export async function updateProfile(data: unknown, userId: string): Promise<UpdateProfileResult> {
+  const t = await getTranslations("AdminProfile.form.submit.error");
+  const schema = createProfileSchema(t);
+
+  const parsed = schema.safeParse(data);
   if (!parsed.success) {
     const flattened = parsed.error.flatten();
 
     return {
       success: false,
-      message: "Invalid form data",
+      message: t("invalidForm"),
       code: "VALIDATION_ERROR",
       errors: {
         fieldErrors: flattened.fieldErrors,
@@ -30,14 +34,14 @@ export async function updateProfile(data: unknown, userId: string): Promise<Upda
     if (error instanceof AppError) {
       return {
         success: false,
-        message: error.message,
+        message: t(error.code),
         code: error.code,
       };
     }
 
     return {
       success: false,
-      message: "Unexpected server error",
+      message: t("UNKNOWN_ERROR"),
       code: "UNKNOWN_ERROR",
     };
   }

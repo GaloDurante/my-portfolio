@@ -1,6 +1,7 @@
 "use client";
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 import { deleteAvatar } from "@/lib/actions/avatar-actions";
 
@@ -22,6 +23,7 @@ import { toast } from "sonner";
 import { Trash2, User } from "lucide-react";
 
 export function RemoveImageButton() {
+  const t = useTranslations("admin.profile.avatar");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
@@ -30,11 +32,11 @@ export function RemoveImageButton() {
     startTransition(async () => {
       try {
         await deleteAvatar();
-        toast.success("Avatar removed");
+        toast.success(t("modal.delete.submit.success"));
         setOpen(false);
         router.refresh();
       } catch {
-        toast.error("Failed to remove avatar");
+        toast.error(t("modal.delete.submit.error"));
       }
     });
   }
@@ -44,7 +46,7 @@ export function RemoveImageButton() {
       <AlertDialogTrigger asChild>
         <Button variant="destructive">
           <Trash2 className="size-4" data-icon="inline-start" />
-          Remove
+          {t("button.destructive")}
         </Button>
       </AlertDialogTrigger>
 
@@ -54,15 +56,13 @@ export function RemoveImageButton() {
             <User className="text-muted-foreground" />
           </AlertDialogMedia>
 
-          <AlertDialogTitle>Remove avatar?</AlertDialogTitle>
+          <AlertDialogTitle>{t("modal.delete.title")}</AlertDialogTitle>
 
-          <AlertDialogDescription>
-            This will permanently delete your current profile photo. You can upload a new one at any time.
-          </AlertDialogDescription>
+          <AlertDialogDescription>{t("modal.delete.description")}</AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>{t("modal.delete.button.cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
@@ -71,7 +71,7 @@ export function RemoveImageButton() {
             disabled={isPending}
           >
             {isPending && <Spinner data-icon="inline-start" />}
-            Confirm
+            {t("modal.delete.button.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

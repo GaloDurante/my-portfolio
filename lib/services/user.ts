@@ -31,13 +31,13 @@ export async function updateUserData(data: ProfileFormData, userId: string) {
     const result = await db.update(user).set(data).where(eq(user.id, userId)).returning();
 
     if (result.length === 0) {
-      throw new AppError("User not found", "USER_NOT_FOUND");
+      throw new AppError("USER_NOT_FOUND");
     }
 
     return result[0];
   } catch (error) {
     console.error("DB error updating user:", error);
 
-    throw new AppError("Database error while updating profile", "DB_UPDATE_FAILED");
+    throw new AppError("DB_UPDATE_FAILED");
   }
 }

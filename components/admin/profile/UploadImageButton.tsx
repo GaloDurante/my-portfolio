@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 import { uploadAvatar } from "@/lib/actions/avatar-actions";
 
@@ -25,6 +26,7 @@ import { Upload, User } from "lucide-react";
 const MAX_SIZE = 2 * 1024 * 1024;
 
 export function UploadImageButton() {
+  const t = useTranslations("admin.profile.avatar");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
@@ -83,14 +85,14 @@ export function UploadImageButton() {
 
       try {
         await uploadAvatar(formData);
-        toast.success("Avatar updated");
+        toast.success(t("modal.upload.submit.success"));
 
         setOpen(false);
         resetState();
 
         router.refresh();
       } catch (error) {
-        toast.error("Upload failed");
+        toast.error(t("modal.upload.submit.error"));
         console.error(error);
       }
     });
@@ -119,14 +121,14 @@ export function UploadImageButton() {
         <DialogTrigger asChild>
           <Button>
             <Upload data-icon="inline-start" className="size-4" />
-            Upload image
+            {t("button.label")}
           </Button>
         </DialogTrigger>
 
         <DialogContent className="max-w-xs">
           <DialogHeader>
-            <DialogTitle>Upload avatar</DialogTitle>
-            <DialogDescription>Choose a profile picture. Supported formats: JPG, PNG. Max size: 2MB.</DialogDescription>
+            <DialogTitle>{t("modal.upload.title")}</DialogTitle>
+            <DialogDescription>{t("modal.upload.description")}</DialogDescription>
 
             <div className="flex flex-col items-center gap-4 my-2">
               {preview ? (
@@ -139,7 +141,7 @@ export function UploadImageButton() {
                   </Avatar>
 
                   <Button variant="ghost" disabled={isPending} onClick={() => inputRef.current?.click()}>
-                    Change image
+                    {t("modal.upload.button.change")}
                   </Button>
                 </>
               ) : (
@@ -156,13 +158,13 @@ export function UploadImageButton() {
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="outline" disabled={isPending}>
-                Cancel
+                {t("modal.upload.button.cancel")}
               </Button>
             </DialogClose>
 
             <Button disabled={!file || isPending} onClick={handleUpload}>
               {isPending && <Spinner data-icon="inline-start" />}
-              Save changes
+              {t("modal.upload.button.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

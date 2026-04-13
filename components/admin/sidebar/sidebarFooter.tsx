@@ -10,7 +10,7 @@ interface AdminSidebarFooterProps {
 }
 
 export function AdminSidebarFooter({ collapsed, onToggle }: AdminSidebarFooterProps) {
-  const t = useTranslations("AdminSidebar");
+  const t = useTranslations("admin.sidebar");
 
   return (
     <div className="px-2 pb-2">

@@ -26,7 +26,7 @@ interface ThemeSelectorProps {
 }
 
 export function ThemeSelector({ themeInitial, collapsed }: ThemeSelectorProps) {
-  const t = useTranslations("AdminSidebar");
+  const t = useTranslations("admin.sidebar.theme");
 
   const { theme, setTheme } = useTheme();
 
@@ -42,7 +42,7 @@ export function ThemeSelector({ themeInitial, collapsed }: ThemeSelectorProps) {
 
   return !collapsed ? (
     <div className="flex items-center justify-between w-full gap-4 px-2">
-      <span className="text-sm font-medium">{t("theme.title")}</span>
+      <span className="text-sm font-medium">{t("title")}</span>
       <div className="flex items-center p-1 rounded-full border">
         {themeOptions.map((option) => (
           <Button
@@ -62,32 +62,30 @@ export function ThemeSelector({ themeInitial, collapsed }: ThemeSelectorProps) {
       </div>
     </div>
   ) : (
-    <div className="px-2">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className={cn("w-full justify-start gap-2", collapsed && "justify-center")}>
-            <CurrentIcon data-icon="inline-start" className="size-4" />
-          </Button>
-        </DropdownMenuTrigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className={cn("w-full justify-start gap-2", collapsed && "justify-center")}>
+          <CurrentIcon data-icon="inline-start" className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-48">
-          <DropdownMenuGroup>
-            <DropdownMenuLabel>{t("theme.label")}</DropdownMenuLabel>
-            <DropdownMenuRadioGroup value={effectiveTheme} onValueChange={handleThemeChange}>
-              {themeOptions.map((option) => {
-                const Icon = option.icon;
+      <DropdownMenuContent className="w-48">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t("label")}</DropdownMenuLabel>
+          <DropdownMenuRadioGroup value={effectiveTheme} onValueChange={handleThemeChange}>
+            {themeOptions.map((option) => {
+              const Icon = option.icon;
 
-                return (
-                  <DropdownMenuRadioItem value={option.value} key={option.value}>
-                    <Icon />
-                    {t(`theme.${option.value}`)}
-                  </DropdownMenuRadioItem>
-                );
-              })}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+              return (
+                <DropdownMenuRadioItem value={option.value} key={option.value}>
+                  <Icon />
+                  {t(option.value)}
+                </DropdownMenuRadioItem>
+              );
+            })}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

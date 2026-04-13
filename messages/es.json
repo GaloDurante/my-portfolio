@@ -1,25 +1,223 @@
 {
-  "AdminSidebar": {
-    "nav": {
-      "dashboard": "Dashboard",
-      "projects": "Projectos",
-      "technologies": "Tecnologías",
-      "profile": "Perfil de Usuario"
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión en tu Cuenta",
+      "description": "Ingresa tus credenciales para acceder al panel de administración.",
+      "form": {
+        "fields": {
+          "email": {
+            "label": "Email",
+            "placeholder": "Ingresa tu correo",
+            "errorMessage": {
+              "invalid": "Por favor, ingresa una dirección de correo válida"
+            }
+          },
+          "password": {
+            "label": "Contraseña",
+            "placeholder": "Ingresa tu contraseña",
+            "errorMessage": {
+              "minLength": "La contraseña debe tener al menos 8 caracteres",
+              "maxLength": "La contraseña debe tener menos de 100 caracteres",
+              "uppercase": "La contraseña debe contener al menos una letra mayúscula",
+              "lowercase": "La contraseña debe contener al menos una letra minúscula",
+              "number": "La contraseña debe contener al menos un número"
+            }
+          }
+        },
+        "button": {
+          "label": "Iniciar sesión"
+        },
+        "extra": "Acceso restringido solamente",
+        "submit": {
+          "success": {
+            "title": "Inicio de sesión exitoso",
+            "message": "Redirigiendo al panel de control..."
+          },
+          "error": {
+            "INVALID_CREDENTIALS": {
+              "title": "Credenciales Inválidas",
+              "message": "El correo o contraseña que ingresaste es incorrecto. Por favor, inténtalo de nuevo."
+            },
+            "UNKNOWN_ERROR": {
+              "title": "Error Desconocido",
+              "message": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
+            }
+          }
+        }
+      }
+    }
+  },
+  "admin": {
+    "sidebar": {
+      "nav": {
+        "dashboard": "Dashboard",
+        "projects": "Projectos",
+        "technologies": "Tecnologías",
+        "profile": "Perfil de Usuario"
+      },
+      "theme": {
+        "title": "Tema",
+        "label": "Selecciona tu tema preferido",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "system": "Sistema"
+      },
+      "language": {
+        "title": "Idioma",
+        "label": "Selecciona tu idioma preferido",
+        "en": "Inglés",
+        "es": "Español"
+      },
+      "signOut": "Cerrar Sesión",
+      "collapse": "Colapsar"
     },
-    "theme": {
-      "title": "Tema",
-      "label": "Selecciona tu tema preferido",
-      "light": "Claro",
-      "dark": "Oscuro",
-      "system": "Sistema"
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "¡Bienvenido de nuevo, {name}! Aquí tienes un vistazo al estado de tu portafolio actual.",
+      "stats": {
+        "projects": {
+          "title": "Projectos",
+          "description": "Gestiona todos tus proyectos"
+        },
+        "technologies": {
+          "title": "Tecnologías",
+          "description": "Gestiona tu pila de tecnologías"
+        }
+      }
     },
-    "language": {
-      "title": "Idioma",
-      "label": "Selecciona tu idioma preferido",
-      "en": "Inglés",
-      "es": "Español"
-    },
-    "signOut": "Cerrar Sesión",
-    "collapse": "Colapsar"
+    "profile": {
+      "title": "Perfil",
+      "welcome": "Gestiona tu presencia pública e identidad profesional.",
+      "avatar": {
+        "button": {
+          "label": "Subir imagen",
+          "destructive": "Eliminar"
+        },
+        "modal": {
+          "upload": {
+            "title": "Subir Avatar",
+            "description": "Selecciona una imagen para subir como tu nuevo avatar. Formatos soportados: JPG, PNG, GIF.",
+            "button": {
+              "change": "Cambiar imagen",
+              "cancel": "Cancelar",
+              "confirm": "Guardar cambios"
+            },
+            "submit": {
+              "success": "Avatar actualizado exitosamente.",
+              "error": "No se pudo actualizar el avatar. Por favor, inténtalo de nuevo."
+            }
+          },
+          "delete": {
+            "title": "Eliminar Avatar?",
+            "description": "Esto eliminará permanentemente tu foto de perfil actual. Puedes subir una nueva en cualquier momento.",
+            "button": {
+              "cancel": "Cancelar",
+              "confirm": "Confirmar"
+            },
+            "submit": {
+              "success": "Avatar eliminado exitosamente.",
+              "error": "No se pudo eliminar el avatar. Por favor, inténtalo de nuevo."
+            }
+          }
+        }
+      },
+      "form": {
+        "personalInfo": {
+          "title": "Información Personal",
+          "description": "Actualiza tus detalles personales y perfil público.",
+          "fields": {
+            "name": {
+              "label": "Nombre completo",
+              "placeholder": "Tu nombre",
+              "errorMessage": {
+                "maxLength": "El nombre debe tener menos de 100 caracteres"
+              }
+            },
+            "title": {
+              "label": "Título Profesional",
+              "placeholder": "e.g. Desarrollador Full Stack",
+              "errorMessage": {
+                "maxLength": "El título debe tener menos de 200 caracteres"
+              }
+            },
+            "email": {
+              "label": "Email",
+              "placeholder": "Ingresa tu dirección de email",
+              "helper": "Se utilizará para iniciar sesión.",
+              "errorMessage": {
+                "invalid": "Debe ser una dirección de email válida"
+              }
+            }
+          }
+        },
+        "about": {
+          "title": "Acerca de & Biografía",
+          "description": "Describe quién eres, qué haces y la experiencia que aportas.",
+          "fields": {
+            "bio": {
+              "label": "Biografía Corta",
+              "placeholder": "Un resumen breve sobre ti...",
+              "helper": "Se muestra en las tarjetas de proyectos y secciones destacadas.",
+              "errorMessage": {
+                "maxLength": "La biografía corta debe tener menos de 300 caracteres"
+              }
+            },
+            "about": {
+              "label": "Biografía Detallada",
+              "placeholder": "Una descripción más detallada de tu trasfondo, habilidades y experiencia.",
+              "errorMessage": {
+                "maxLength": "La biografía detallada debe tener menos de 2000 caracteres"
+              }
+            }
+          }
+        },
+        "socialLinks": {
+          "title": "Presencia & Contactos",
+          "description": "Agrega enlaces y detalles para que las personas puedan encontrarte y tu trabajo en línea.",
+          "fields": {
+            "location": {
+              "label": "Ubicación",
+              "placeholder": "e.g. Quito, Ecuador",
+              "errorMessage": {
+                "maxLength": "La ubicación debe tener menos de 100 caracteres"
+              }
+            },
+            "website": {
+              "label": "Sitio Web Personal",
+              "placeholder": "https://tuwebsite.com",
+              "errorMessage": {
+                "invalid": "Debe ser una URL válida"
+              }
+            },
+            "github": {
+              "label": "GitHub",
+              "placeholder": "https://github.com/username",
+              "errorMessage": {
+                "invalid": "Debe ser una URL válida"
+              }
+            },
+            "linkedin": {
+              "label": "LinkedIn",
+              "placeholder": "https://linkedin.com/in/username",
+              "errorMessage": {
+                "invalid": "Debe ser una URL válida"
+              }
+            }
+          }
+        },
+        "buttons": {
+          "save": "Guardar Cambios"
+        },
+        "submit": {
+          "success": "Perfil actualizado exitosamente.",
+          "error": {
+            "invalidForm": "Por favor, corrige los errores en el formulario e inténtalo de nuevo.",
+            "USER_NOT_FOUND": "Usuario no encontrado. Por favor, recarga la página e inténtalo de nuevo.",
+            "DB_UPDATE_FAILED": "Ocurrió un error al actualizar tu perfil. Por favor, inténtalo de nuevo más tarde.",
+            "UNKNOWN_ERROR": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
+          }
+        }
+      }
+    }
   }
 }

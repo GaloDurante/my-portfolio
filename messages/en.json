@@ -1,25 +1,224 @@
 {
-  "AdminSidebar": {
-    "nav": {
-      "dashboard": "Dashboard",
-      "projects": "Projects",
-      "technologies": "Technologies",
-      "profile": "User Profile"
+  "auth": {
+    "login": {
+      "title": "Login to Your Account",
+      "description": "Enter your credentials to access the admin panel.",
+      "form": {
+        "fields": {
+          "email": {
+            "label": "Email",
+            "placeholder": "Enter your email address",
+            "errorMessage": {
+              "invalid": "Please enter a valid email address"
+            }
+          },
+          "password": {
+            "label": "Password",
+            "placeholder": "Enter your password",
+            "errorMessage": {
+              "minLength": "Password must be at least 8 characters",
+              "maxLength": "Password must be less than 100 characters",
+              "uppercase": "Password must contain at least one uppercase letter",
+              "lowercase": "Password must contain at least one lowercase letter",
+              "number": "Password must contain at least one number"
+            }
+          }
+        },
+        "button": {
+          "label": "Sign In"
+        },
+        "extra": "Restricted access only",
+        "submit": {
+          "success": {
+            "title": "Login successful",
+            "message": "Redirecting to dashboard..."
+          },
+          "error": {
+            "INVALID_CREDENTIALS": {
+              "title": "Invalid Credentials",
+              "message": "The email or password you entered is incorrect. Please try again."
+            },
+            "UNKNOWN_ERROR": {
+              "title": "Unknown Error",
+              "message": "An unexpected error occurred. Please try again later."
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "admin": {
+    "sidebar": {
+      "nav": {
+        "dashboard": "Dashboard",
+        "projects": "Projects",
+        "technologies": "Technologies",
+        "profile": "User Profile"
+      },
+      "theme": {
+        "title": "Theme",
+        "label": "Select your preferred theme",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      },
+      "language": {
+        "title": "Language",
+        "label": "Select your preferred language",
+        "en": "English",
+        "es": "Spanish"
+      },
+      "signOut": "Sign Out",
+      "collapse": "Collapse"
     },
-    "theme": {
-      "title": "Theme",
-      "label": "Select your preferred theme",
-      "light": "Light",
-      "dark": "Dark",
-      "system": "System"
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome back, {name}! Here is a look at your current portfolio's status.",
+      "stats": {
+        "projects": {
+          "title": "Projects",
+          "description": "Manage your portfolio projects"
+        },
+        "technologies": {
+          "title": "Technologies",
+          "description": "Manage your tech stack"
+        }
+      }
     },
-    "language": {
-      "title": "Language",
-      "label": "Select your preferred language",
-      "en": "English",
-      "es": "Spanish"
-    },
-    "signOut": "Sign Out",
-    "collapse": "Collapse"
+    "profile": {
+      "title": "Profile",
+      "welcome": "Manage your public presence and professional identity.",
+      "avatar": {
+        "button": {
+          "label": "Upload image",
+          "destructive": "Remove"
+        },
+        "modal": {
+          "upload": {
+            "title": "Upload Avatar",
+            "description": "Select an image to upload as your new avatar. Supported formats: JPG, PNG, GIF.",
+            "button": {
+              "change": "Change image",
+              "cancel": "Cancel",
+              "confirm": "Save changes"
+            },
+            "submit": {
+              "success": "Avatar updated successfully.",
+              "error": "Failed to update avatar. Please try again."
+            }
+          },
+          "delete": {
+            "title": "Remove Avatar?",
+            "description": "This will permanently delete your current profile photo. You can upload a new one at any time.",
+            "button": {
+              "cancel": "Cancel",
+              "confirm": "Confirm"
+            },
+            "submit": {
+              "success": "Avatar removed successfully.",
+              "error": "Failed to remove avatar. Please try again."
+            }
+          }
+        }
+      },
+      "form": {
+        "personalInfo": {
+          "title": "Personal Information",
+          "description": "Update your personal details and public profile.",
+          "fields": {
+            "name": {
+              "label": "Display Name",
+              "placeholder": "Your name",
+              "errorMessage": {
+                "maxLength": "Name must be less than 100 characters"
+              }
+            },
+            "title": {
+              "label": "Professional Title",
+              "placeholder": "e.g. Full Stack Developer",
+              "errorMessage": {
+                "maxLength": "Title must be less than 200 characters"
+              }
+            },
+            "email": {
+              "label": "Email",
+              "placeholder": "Enter your email address",
+              "helper": "This will be used for sign in.",
+              "errorMessage": {
+                "invalid": "Must be a valid email address"
+              }
+            }
+          }
+        },
+        "about": {
+          "title": "About & Bio",
+          "description": "Describe who you are, what you do, and the experience you bring.",
+          "fields": {
+            "bio": {
+              "label": "Short Bio",
+              "placeholder": "A brief summary about yourself...",
+              "helper": "Shown in project cards and featured sections.",
+              "errorMessage": {
+                "maxLength": "Short bio must be less than 300 characters"
+              }
+            },
+            "about": {
+              "label": "Detailed About",
+              "placeholder": "A more detailed description of your background, skills, and experience.",
+              "errorMessage": {
+                "maxLength": "About section must be less than 2000 characters"
+              }
+            }
+          }
+        },
+        "socialLinks": {
+          "title": "Presence & Contacts",
+          "description": "Add links and details so people can find you and your work online.",
+          "fields": {
+            "location": {
+              "label": "Location",
+              "placeholder": "e.g. Quito, Ecuador",
+              "errorMessage": {
+                "maxLength": "Location must be less than 100 characters"
+              }
+            },
+            "website": {
+              "label": "Personal Website",
+              "placeholder": "https://yourwebsite.com",
+              "errorMessage": {
+                "invalid": "Must be a valid URL"
+              }
+            },
+            "github": {
+              "label": "GitHub",
+              "placeholder": "https://github.com/username",
+              "errorMessage": {
+                "invalid": "Must be a valid URL"
+              }
+            },
+            "linkedin": {
+              "label": "LinkedIn",
+              "placeholder": "https://linkedin.com/in/username",
+              "errorMessage": {
+                "invalid": "Must be a valid URL"
+              }
+            }
+          }
+        },
+        "buttons": {
+          "save": "Save Changes"
+        },
+        "submit": {
+          "success": "Profile updated successfully.",
+          "error": {
+            "invalidForm": "Please correct the errors in the form and try again.",
+            "USER_NOT_FOUND": "User not found. Please refresh the page and try again.",
+            "DB_UPDATE_FAILED": "An error occurred while updating your profile. Please try again later.",
+            "UNKNOWN_ERROR": "An unexpected error occurred. Please try again later."
+          }
+        }
+      }
+    }
   }
 }

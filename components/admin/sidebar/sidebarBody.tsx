@@ -23,7 +23,7 @@ interface AdminSidebarBodyProps {
 }
 
 export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyProps) {
-  const t = useTranslations("AdminSidebar");
+  const t = useTranslations("admin.sidebar");
 
   const pathname = usePathname();
 

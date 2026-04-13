@@ -1,13 +1,14 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { useTranslations } from "next-intl";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useRouter } from "@/i18n/navigation";
 
 import { updateProfile } from "@/lib/actions/profile-actions";
 import { applyServerValidationErrors } from "@/lib/utils";
-import { profileSchema, type ProfileFormData } from "@/lib/schemas/profile";
+import { createProfileSchema, type ProfileFormData } from "@/lib/schemas/profile";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -23,11 +24,14 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
+  const t = useTranslations("admin.profile.form");
+  const schema = createProfileSchema(t);
   const router = useRouter();
+
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<ProfileFormData>({
-    resolver: zodResolver(profileSchema),
+    resolver: zodResolver(schema),
     defaultValues,
   });
 
@@ -45,7 +49,7 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
         return;
       }
 
-      toast.success("Profile updated successfully");
+      toast.success(t("submit.success"));
       router.refresh();
     });
   });
@@ -56,29 +60,29 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
         <div>
           <div className="flex gap-2 items-center">
             <IdCard size={20} />
-            <h2 className="text-lg font-semibold">Personal Information</h2>
+            <h2 className="text-lg font-semibold">{t("personalInfo.title")}</h2>
           </div>
-          <p className="text-sm text-muted-foreground mt-1">Update your personal details and public profile.</p>
+          <p className="text-sm text-muted-foreground mt-1">{t("personalInfo.description")}</p>
         </div>
 
         <FieldGroup>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field data-invalid={!!form.formState.errors.name}>
-              <FieldLabel htmlFor="name">Display Name</FieldLabel>
-              <Input id="name" {...form.register("name")} placeholder="Your name" />
+              <FieldLabel htmlFor="name">{t("personalInfo.fields.name.label")}</FieldLabel>
+              <Input id="name" {...form.register("name")} placeholder={t("personalInfo.fields.name.placeholder")} />
               <FieldError>{form.formState.errors.name?.message}</FieldError>
             </Field>
 
             <Field data-invalid={!!form.formState.errors.title}>
-              <FieldLabel htmlFor="title">Professional Title</FieldLabel>
-              <Input id="title" {...form.register("title")} placeholder="e.g. Full Stack Developer" />
+              <FieldLabel htmlFor="title">{t("personalInfo.fields.title.label")}</FieldLabel>
+              <Input id="title" {...form.register("title")} placeholder={t("personalInfo.fields.title.placeholder")} />
               <FieldError>{form.formState.errors.title?.message}</FieldError>
             </Field>
 
             <Field data-invalid={!!form.formState.errors.email}>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input id="email" {...form.register("email")} placeholder="your.email@example.com" />
-              <FieldDescription>This will be used for sign in.</FieldDescription>
+              <FieldLabel htmlFor="email">{t("personalInfo.fields.email.label")}</FieldLabel>
+              <Input id="email" {...form.register("email")} placeholder={t("personalInfo.fields.email.placeholder")} />
+              <FieldDescription>{t("personalInfo.fields.email.helper")}</FieldDescription>
               <FieldError>{form.formState.errors.email?.message}</FieldError>
             </Field>
           </div>
@@ -89,28 +93,26 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
         <div>
           <div className="flex gap-2 items-center">
             <BookText size={20} />
-            <h2 className="text-lg font-semibold">About & Bio</h2>
+            <h2 className="text-lg font-semibold">{t("about.title")}</h2>
           </div>
-          <p className="text-sm text-muted-foreground mt-1">
-            Describe who you are, what you do, and the experience you bring.
-          </p>
+          <p className="text-sm text-muted-foreground mt-1">{t("about.description")}</p>
         </div>
         <FieldGroup>
           <Field data-invalid={!!form.formState.errors.shortBio}>
-            <FieldLabel htmlFor="shortBio">Short Bio</FieldLabel>
+            <FieldLabel htmlFor="shortBio">{t("about.fields.bio.label")}</FieldLabel>
             <Textarea
               id="shortBio"
               {...form.register("shortBio")}
-              placeholder="A brief summary about yourself..."
+              placeholder={t("about.fields.bio.placeholder")}
               rows={3}
             />
-            <FieldDescription>Shown in project cards and featured sections.</FieldDescription>
+            <FieldDescription>{t("about.fields.bio.helper")}</FieldDescription>
             <FieldError>{form.formState.errors.shortBio?.message}</FieldError>
           </Field>
 
           <Field data-invalid={!!form.formState.errors.bio}>
-            <FieldLabel htmlFor="bio">Full Bio</FieldLabel>
-            <Textarea id="bio" {...form.register("bio")} placeholder="Tell us more about yourself..." rows={6} />
+            <FieldLabel htmlFor="bio">{t("about.fields.about.label")}</FieldLabel>
+            <Textarea id="bio" {...form.register("bio")} placeholder={t("about.fields.about.placeholder")} rows={6} />
             <FieldError>{form.formState.errors.bio?.message}</FieldError>
           </Field>
         </FieldGroup>
@@ -120,35 +122,50 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
         <div>
           <div className="flex gap-2 items-center">
             <Globe size={20} />
-            <h2 className="text-lg font-semibold">Presence & Contact</h2>
+            <h2 className="text-lg font-semibold">{t("socialLinks.title")}</h2>
           </div>
-          <p className="text-sm text-muted-foreground mt-1">
-            Add links and details so people can find you and your work online.
-          </p>
+          <p className="text-sm text-muted-foreground mt-1">{t("socialLinks.description")}</p>
         </div>
         <FieldGroup>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field aria-invalid={!!form.formState.errors.location}>
-              <FieldLabel htmlFor="location">Location</FieldLabel>
-              <Input id="location" {...form.register("location")} placeholder="e.g. Quito, Ecuador" />
+              <FieldLabel htmlFor="location">{t("socialLinks.fields.location.label")}</FieldLabel>
+              <Input
+                id="location"
+                {...form.register("location")}
+                placeholder={t("socialLinks.fields.location.placeholder")}
+              />
               <FieldError>{form.formState.errors.location?.message}</FieldError>
             </Field>
 
             <Field aria-invalid={!!form.formState.errors.website}>
-              <FieldLabel htmlFor="website">Website</FieldLabel>
-              <Input id="website" type="url" {...form.register("website")} placeholder="https://yourwebsite.com" />
+              <FieldLabel htmlFor="website">{t("socialLinks.fields.website.label")}</FieldLabel>
+              <Input
+                id="website"
+                type="url"
+                {...form.register("website")}
+                placeholder={t("socialLinks.fields.website.placeholder")}
+              />
               <FieldError>{form.formState.errors.website?.message}</FieldError>
             </Field>
 
             <Field aria-invalid={!!form.formState.errors.github}>
-              <FieldLabel htmlFor="github">GitHub</FieldLabel>
-              <Input id="github" {...form.register("github")} placeholder="https://github.com/username" />
+              <FieldLabel htmlFor="github">{t("socialLinks.fields.github.label")}</FieldLabel>
+              <Input
+                id="github"
+                {...form.register("github")}
+                placeholder={t("socialLinks.fields.github.placeholder")}
+              />
               <FieldError>{form.formState.errors.github?.message}</FieldError>
             </Field>
 
             <Field aria-invalid={!!form.formState.errors.linkedin}>
-              <FieldLabel htmlFor="linkedin">LinkedIn</FieldLabel>
-              <Input id="linkedin" {...form.register("linkedin")} placeholder="https://www.linkedin.com/in/username/" />
+              <FieldLabel htmlFor="linkedin">{t("socialLinks.fields.linkedin.label")}</FieldLabel>
+              <Input
+                id="linkedin"
+                {...form.register("linkedin")}
+                placeholder={t("socialLinks.fields.linkedin.placeholder")}
+              />
               <FieldError>{form.formState.errors.linkedin?.message}</FieldError>
             </Field>
           </div>
@@ -157,7 +174,7 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
 
       <Button type="submit" disabled={isPending} className="w-fit self-end">
         {isPending && <Spinner data-icon="inline-start" />}
-        Save changes
+        {t("buttons.save")}
       </Button>
     </form>
   );
