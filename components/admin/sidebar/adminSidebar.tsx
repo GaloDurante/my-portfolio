@@ -21,7 +21,10 @@ export function AdminSidebar({ user, collapsedInitial, themeInitial }: AdminSide
 
   return (
     <aside
-      className={cn("relative flex h-full flex-col bg-card transition-all duration-300", collapsed ? "w-16" : "w-56")}
+      className={cn(
+        "relative flex h-full flex-col bg-card transition-all duration-300 border-r",
+        collapsed ? "w-16" : "w-56",
+      )}
     >
       <AdminSidebarHeader collapsed={collapsed} user={user} />
 

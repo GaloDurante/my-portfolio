@@ -108,9 +108,9 @@ Install and configure shadcn components:
 ### 5.3 Profile Management
 
 - [x] **5.3.1** Crear page `app/(admin)/admin/profile/page.tsx` - page con avatar y form
-- [ ] **5.3.2** Agregar Zod schemas para validacion de profile
-- [ ] **5.3.3** Agregar server actions para actualizar profile
-- [ ] **5.3.4** Integrar form con server actions
+- [x] **5.3.2** Agregar Zod schemas para validacion de profile
+- [x] **5.3.3** Agregar server actions para actualizar profile
+- [x] **5.3.4** Integrar form con server actions
 
 ### 5.4 Projects Management
 
