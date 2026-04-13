@@ -69,19 +69,34 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
           <div className="grid gap-4 sm:grid-cols-2">
             <Field data-invalid={!!form.formState.errors.name}>
               <FieldLabel htmlFor="name">{t("personalInfo.fields.name.label")}</FieldLabel>
-              <Input id="name" {...form.register("name")} placeholder={t("personalInfo.fields.name.placeholder")} />
+              <Input
+                id="name"
+                {...form.register("name")}
+                placeholder={t("personalInfo.fields.name.placeholder")}
+                aria-invalid={!!form.formState.errors.name}
+              />
               <FieldError>{form.formState.errors.name?.message}</FieldError>
             </Field>
 
             <Field data-invalid={!!form.formState.errors.title}>
               <FieldLabel htmlFor="title">{t("personalInfo.fields.title.label")}</FieldLabel>
-              <Input id="title" {...form.register("title")} placeholder={t("personalInfo.fields.title.placeholder")} />
+              <Input
+                id="title"
+                {...form.register("title")}
+                placeholder={t("personalInfo.fields.title.placeholder")}
+                aria-invalid={!!form.formState.errors.title}
+              />
               <FieldError>{form.formState.errors.title?.message}</FieldError>
             </Field>
 
             <Field data-invalid={!!form.formState.errors.email}>
               <FieldLabel htmlFor="email">{t("personalInfo.fields.email.label")}</FieldLabel>
-              <Input id="email" {...form.register("email")} placeholder={t("personalInfo.fields.email.placeholder")} />
+              <Input
+                id="email"
+                {...form.register("email")}
+                placeholder={t("personalInfo.fields.email.placeholder")}
+                aria-invalid={!!form.formState.errors.email}
+              />
               <FieldDescription>{t("personalInfo.fields.email.helper")}</FieldDescription>
               <FieldError>{form.formState.errors.email?.message}</FieldError>
             </Field>
@@ -105,6 +120,7 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
               {...form.register("shortBio")}
               placeholder={t("about.fields.bio.placeholder")}
               rows={3}
+              aria-invalid={!!form.formState.errors.shortBio}
             />
             <FieldDescription>{t("about.fields.bio.helper")}</FieldDescription>
             <FieldError>{form.formState.errors.shortBio?.message}</FieldError>
@@ -112,7 +128,13 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
 
           <Field data-invalid={!!form.formState.errors.bio}>
             <FieldLabel htmlFor="bio">{t("about.fields.about.label")}</FieldLabel>
-            <Textarea id="bio" {...form.register("bio")} placeholder={t("about.fields.about.placeholder")} rows={6} />
+            <Textarea
+              id="bio"
+              {...form.register("bio")}
+              placeholder={t("about.fields.about.placeholder")}
+              rows={6}
+              aria-invalid={!!form.formState.errors.bio}
+            />
             <FieldError>{form.formState.errors.bio?.message}</FieldError>
           </Field>
         </FieldGroup>
@@ -128,43 +150,47 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
         </div>
         <FieldGroup>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field aria-invalid={!!form.formState.errors.location}>
+            <Field data-invalid={!!form.formState.errors.location}>
               <FieldLabel htmlFor="location">{t("socialLinks.fields.location.label")}</FieldLabel>
               <Input
                 id="location"
                 {...form.register("location")}
                 placeholder={t("socialLinks.fields.location.placeholder")}
+                aria-invalid={!!form.formState.errors.location}
               />
               <FieldError>{form.formState.errors.location?.message}</FieldError>
             </Field>
 
-            <Field aria-invalid={!!form.formState.errors.website}>
+            <Field data-invalid={!!form.formState.errors.website}>
               <FieldLabel htmlFor="website">{t("socialLinks.fields.website.label")}</FieldLabel>
               <Input
                 id="website"
                 type="url"
                 {...form.register("website")}
                 placeholder={t("socialLinks.fields.website.placeholder")}
+                aria-invalid={!!form.formState.errors.website}
               />
               <FieldError>{form.formState.errors.website?.message}</FieldError>
             </Field>
 
-            <Field aria-invalid={!!form.formState.errors.github}>
+            <Field data-invalid={!!form.formState.errors.github}>
               <FieldLabel htmlFor="github">{t("socialLinks.fields.github.label")}</FieldLabel>
               <Input
                 id="github"
                 {...form.register("github")}
                 placeholder={t("socialLinks.fields.github.placeholder")}
+                aria-invalid={!!form.formState.errors.github}
               />
               <FieldError>{form.formState.errors.github?.message}</FieldError>
             </Field>
 
-            <Field aria-invalid={!!form.formState.errors.linkedin}>
+            <Field data-invalid={!!form.formState.errors.linkedin}>
               <FieldLabel htmlFor="linkedin">{t("socialLinks.fields.linkedin.label")}</FieldLabel>
               <Input
                 id="linkedin"
                 {...form.register("linkedin")}
                 placeholder={t("socialLinks.fields.linkedin.placeholder")}
+                aria-invalid={!!form.formState.errors.linkedin}
               />
               <FieldError>{form.formState.errors.linkedin?.message}</FieldError>
             </Field>
