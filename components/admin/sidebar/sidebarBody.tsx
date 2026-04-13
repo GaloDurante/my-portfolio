@@ -2,13 +2,13 @@ import { useTranslations } from "next-intl";
 
 import { Link, usePathname } from "@/i18n/navigation";
 
-import { signOutAction } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, FolderOpen, Cpu, User, LogOut } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Cpu, User } from "lucide-react";
 import { ThemeSelector } from "@/components/admin/sidebar/themeSelector";
 import { LanguageSelector } from "@/components/admin/sidebar/languageSelector";
+import { SignOutButton } from "@/components/admin/sidebar/SignOutButton";
 
 const navItems = [
   { value: "dashboard", href: "/admin", icon: LayoutDashboard },
@@ -59,16 +59,7 @@ export function AdminSidebarBody({ collapsed, themeInitial }: AdminSidebarBodyPr
         <ThemeSelector collapsed={collapsed} themeInitial={themeInitial} />
         <LanguageSelector collapsed={collapsed} />
 
-        <form action={signOutAction}>
-          <Button
-            variant="ghost"
-            className={cn("w-full justify-start gap-2", collapsed && "justify-center")}
-            type="submit"
-          >
-            <LogOut data-icon="inline-start" />
-            {!collapsed && t("signOut")}
-          </Button>
-        </form>
+        <SignOutButton collapsed={collapsed} />
       </div>
     </nav>
   );

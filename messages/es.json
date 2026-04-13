@@ -68,7 +68,17 @@
         "en": "Inglés",
         "es": "Español"
       },
-      "signOut": "Cerrar Sesión",
+      "signOut": {
+        "label": "Cerrar sesión",
+        "modal": {
+          "title": "Cerrar sesión?",
+          "description": "Necesitarás iniciar sesión de nuevo para acceder al panel de administración.",
+          "button": {
+            "cancel": "Cancelar",
+            "confirm": "Confirmar"
+          }
+        }
+      },
       "collapse": "Colapsar"
     },
     "dashboard": {

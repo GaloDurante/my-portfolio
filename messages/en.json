@@ -69,7 +69,18 @@
         "en": "English",
         "es": "Spanish"
       },
-      "signOut": "Sign Out",
+      "signOut": {
+        "label": "Sign Out",
+        "modal": {
+          "title": "Sign Out?",
+          "description": "You will need to log in again to access the admin panel.",
+          "button": {
+            "cancel": "Cancel",
+            "confirm": "Confirm"
+          }
+        }
+      },
+
       "collapse": "Collapse"
     },
     "dashboard": {
