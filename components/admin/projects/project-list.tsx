@@ -73,7 +73,7 @@ export async function ProjectList({ projects, userId }: ProjectListProps) {
                 <StarOff className="size-4 text-muted-foreground" />
               )}
             </TableCell>
-            <TableCell className="font-medium">{formatDate(new Date())}</TableCell>
+            <TableCell className="font-medium">{formatDate(project.updatedAt)}</TableCell>
             <TableCell className="text-right">
               <div className="flex gap-2 justify-end">
                 <Button variant="ghost" size="sm" asChild>

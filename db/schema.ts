@@ -56,14 +56,14 @@ export const projects = sqliteTable("projects", {
 
   order: integer("order").notNull().default(0),
 
-  startDate: integer("start_date", { mode: "timestamp" }),
-  endDate: integer("end_date", { mode: "timestamp" }),
+  startDate: text("start_date"),
+  endDate: text("end_date"),
 
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: text("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 
-  updatedAt: integer("updated_at", { mode: "timestamp" })
+  updatedAt: text("updated_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 });
@@ -89,11 +89,11 @@ export const technologies = sqliteTable("technologies", {
 
   order: integer("order").notNull().default(0),
 
-  createdAt: integer("created_at", { mode: "timestamp" })
+  createdAt: text("created_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 
-  updatedAt: integer("updated_at", { mode: "timestamp" })
+  updatedAt: text("updated_at")
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
 });
