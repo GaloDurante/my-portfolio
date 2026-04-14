@@ -29,7 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         collapsedInitial={collapsed}
         themeInitial={themeInitial}
       />
-      <div className="flex flex-1 flex-col overflow-y-auto p-8">{children}</div>
+      <div className="flex-1 overflow-y-auto p-8">{children}</div>
     </div>
   );
 }

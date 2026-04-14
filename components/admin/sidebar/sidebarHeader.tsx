@@ -11,7 +11,7 @@ interface AdminSidebarHeaderProps {
 export function AdminSidebarHeader({ collapsed, user }: AdminSidebarHeaderProps) {
   return (
     <>
-      <div className={cn("flex h-14 items-center p-2")}>
+      <div className={cn("flex h-14 items-center p-2", collapsed && "justify-center")}>
         {user?.image ? (
           <Avatar className={cn("size-8", collapsed && "mx-auto")}>
             <AvatarImage src={user.image} alt={user.name ?? "username"} />

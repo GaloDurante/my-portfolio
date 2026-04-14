@@ -228,6 +228,36 @@
           }
         }
       }
+    },
+    "projects": {
+      "title": "Proyectos",
+      "welcome": "Gestiona los proyectos de tu portafolio. Añade, edita o elimina proyectos para mostrar tu trabajo.",
+      "list": {
+        "empty": "Sin proyectos todavía",
+        "emptyDescription": "Comienza creando tu primer proyecto.",
+        "columns": {
+          "title": "Título",
+          "slug": "Slug",
+          "status": {
+            "label": "Estado",
+            "options": {
+              "draft": "Borrador",
+              "published": "Publicado"
+            }
+          },
+          "featured": "Destacado",
+          "lastUpdated": "Última Modificación",
+          "order": "Orden",
+          "createdAt": "Creado",
+          "actions": "Acciones"
+        },
+
+        "buttons": {
+          "create": "Nuevo Proyecto",
+          "edit": "Editar",
+          "delete": "Eliminar"
+        }
+      }
     }
   }
 }

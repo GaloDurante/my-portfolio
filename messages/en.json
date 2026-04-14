@@ -230,6 +230,36 @@
           }
         }
       }
+    },
+    "projects": {
+      "title": "Projects",
+      "welcome": "Manage your portfolio projects. Add, edit, or remove projects to showcase your work.",
+      "list": {
+        "empty": "No projects yet",
+        "emptyDescription": "Get started by creating your first project.",
+        "columns": {
+          "title": "Title",
+          "slug": "Slug",
+          "status": {
+            "label": "Status",
+            "options": {
+              "draft": "Draft",
+              "published": "Published"
+            }
+          },
+          "featured": "Featured",
+          "lastUpdated": "Last Modified",
+          "order": "Order",
+          "createdAt": "Created",
+          "actions": "Actions"
+        },
+
+        "buttons": {
+          "create": "New Project",
+          "edit": "Edit",
+          "delete": "Delete"
+        }
+      }
     }
   }
 }

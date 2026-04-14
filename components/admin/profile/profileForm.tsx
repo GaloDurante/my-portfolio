@@ -97,8 +97,8 @@ export function ProfileForm({ defaultValues, userId }: ProfileFormProps) {
                 placeholder={t("personalInfo.fields.email.placeholder")}
                 aria-invalid={!!form.formState.errors.email}
               />
-              <FieldDescription>{t("personalInfo.fields.email.helper")}</FieldDescription>
               <FieldError>{form.formState.errors.email?.message}</FieldError>
+              <FieldDescription>{t("personalInfo.fields.email.helper")}</FieldDescription>
             </Field>
           </div>
         </FieldGroup>

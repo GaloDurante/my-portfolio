@@ -114,7 +114,7 @@ Install and configure shadcn components:
 
 ### 5.4 Projects Management
 
-- [ ] **5.4.1** Create `components/admin/project-list.tsx` - projects table
+- [x] **5.4.1** Create `components/admin/project-list.tsx` - projects table
 - [ ] **5.4.2** Create `components/admin/project-form.tsx` - create/edit form
 - [ ] **5.4.3** Add Zod validation schemas to all POST/PUT routes
 - [ ] **5.4.4** Add error handling and proper HTTP status codes
