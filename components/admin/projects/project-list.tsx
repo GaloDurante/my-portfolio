@@ -1,16 +1,24 @@
 import { getTranslations } from "next-intl/server";
 
 import { Link } from "@/i18n/navigation";
+import { enUS, es } from "date-fns/locale";
+import { getLocale } from "next-intl/server";
+import { format } from "date-fns";
+
+import { deleteProjectAction } from "@/lib/actions/project-actions";
+import { formatSmartDate } from "@/lib/utils/date";
+import type { ProjectType } from "@/lib/types/project";
+
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-
+import { DeleteButton } from "@/components/admin/DeleteButton";
 import { Pencil, Star, StarOff } from "lucide-react";
-import type { ProjectType } from "@/lib/types/project";
 
-import { format } from "date-fns";
-import { enUS, es } from "date-fns/locale";
-import { getLocale } from "next-intl/server";
+const dateLocaleMap = {
+  en: enUS,
+  es: es,
+};
 
 interface ProjectListProps {
   projects: ProjectType[];
@@ -30,17 +38,7 @@ export async function ProjectList({ projects, userId }: ProjectListProps) {
   }
 
   const locale = await getLocale();
-
-  const dateLocaleMap = {
-    en: enUS,
-    es: es,
-  };
-
   const dateLocale = dateLocaleMap[locale as keyof typeof dateLocaleMap] ?? enUS;
-
-  function formatDate(date: Date | string) {
-    return format(new Date(date), "PPP", { locale: dateLocale });
-  }
 
   return (
     <Table>
@@ -73,16 +71,30 @@ export async function ProjectList({ projects, userId }: ProjectListProps) {
                 <StarOff className="size-4 text-muted-foreground" />
               )}
             </TableCell>
-            <TableCell className="font-medium">{formatDate(project.updatedAt)}</TableCell>
+            <TableCell className="font-medium">
+              <span
+                title={format(new Date(project.updatedAt), "PPPpp", {
+                  locale: dateLocale,
+                })}
+              >
+                {formatSmartDate(project.updatedAt, { locale: dateLocale })}
+              </span>
+            </TableCell>
             <TableCell className="text-right">
               <div className="flex gap-2 justify-end">
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="ghost" asChild>
                   <Link href={`/admin/projects/${project.id}/edit`}>
                     <Pencil data-icon="inline-start" />
                     {t("buttons.edit")}
                   </Link>
                 </Button>
-                {/* <DeleteButton /> */}
+                <DeleteButton
+                  handleDelete={async () => {
+                    "use server";
+                    return deleteProjectAction(project.id, userId);
+                  }}
+                  translationsParam="admin.projects.list.deleteModal"
+                />
               </div>
             </TableCell>
           </TableRow>

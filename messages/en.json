@@ -254,6 +254,23 @@
           "actions": "Actions"
         },
 
+        "deleteModal": {
+          "title": "Delete Project?",
+          "description": "This action cannot be undone. This will permanently delete the project and all associated data.",
+          "submit": {
+            "success": "Project deleted successfully.",
+            "error": {
+              "DB_DELETE_FAILED": "An error occurred while deleting the project. Please try again later.",
+              "UNKNOWN_ERROR": "An unexpected error occurred. Please try again later."
+            }
+          },
+          "buttons": {
+            "label": "Delete",
+            "cancel": "Cancel",
+            "confirm": "Confirm"
+          }
+        },
+
         "buttons": {
           "create": "New Project",
           "edit": "Edit",

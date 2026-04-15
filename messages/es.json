@@ -252,6 +252,23 @@
           "actions": "Acciones"
         },
 
+        "deleteModal": {
+          "title": "Eliminar Proyecto?",
+          "description": "Esto eliminará permanentemente el proyecto seleccionado. Esta acción no se puede deshacer.",
+          "submit": {
+            "success": "Proyecto eliminado exitosamente.",
+            "error": {
+              "DB_DELETE_FAILED": "Ocurrió un error al eliminar el proyecto. Por favor, inténtalo de nuevo más tarde.",
+              "UNKNOWN_ERROR": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
+            }
+          },
+          "buttons": {
+            "label": "Eliminar",
+            "cancel": "Cancelar",
+            "confirm": "Confirmar"
+          }
+        },
+
         "buttons": {
           "create": "Nuevo Proyecto",
           "edit": "Editar",
