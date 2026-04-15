@@ -276,6 +276,80 @@
           "edit": "Edit",
           "delete": "Delete"
         }
+      },
+      "form": {
+        "title": "New Project",
+        "description": "Create a new project to showcase your work.",
+        "nav": {
+          "title": "Project Settings",
+          "basic": "Basic Info",
+          "media": "Media & Assets",
+          "details": "Details & Links"
+        },
+        "basic": {
+          "title": "Basic Information",
+          "description": "Enter the basic details about your project.",
+          "fields": {
+            "title": {
+              "label": "Title",
+              "placeholder": "My awesome project",
+              "errorMessage": {
+                "minLength": "Title is required",
+                "maxLength": "Title must be less than 200 characters"
+              }
+            },
+            "slug": {
+              "label": "Slug",
+              "placeholder": "my-awesome-project",
+              "helper": "URL-friendly identifier",
+              "errorMessage": {
+                "minLength": "Slug is required",
+                "maxLength": "Slug must be less than 200 characters",
+                "pattern": "Slug can only contain lowercase letters, numbers, and hyphens"
+              }
+            },
+            "shortDescription": {
+              "label": "Short Description",
+              "placeholder": "A brief summary of the project",
+              "helper": "Displayed in cards and previews",
+              "errorMessage": {
+                "maxLength": "Short description must be less than 500 characters"
+              }
+            },
+            "description": {
+              "label": "Description",
+              "placeholder": "Describe the project in detail...",
+              "errorMessage": {
+                "maxLength": "Description must be less than 4000 characters"
+              }
+            }
+          }
+        },
+        "settings": {
+          "title": "Settings",
+          "description": "Configure project visibility and order.",
+          "fields": {
+            "status": {
+              "label": "Status",
+              "draft": "Draft",
+              "published": "Published",
+              "errorMessage": {
+                "invalid": "Status must be either 'draft' or 'published'"
+              }
+            },
+            "order": {
+              "label": "Display Order",
+              "helper": "Lower numbers appear first"
+            },
+            "featured": {
+              "label": "Featured",
+              "helper": "Show in homepage featured section"
+            }
+          }
+        },
+        "buttons": {
+          "save": "Create Project"
+        }
       }
     }
   }

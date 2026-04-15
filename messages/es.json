@@ -274,6 +274,80 @@
           "edit": "Editar",
           "delete": "Eliminar"
         }
+      },
+      "form": {
+        "title": "Nuevo Proyecto",
+        "description": "Crea un nuevo proyecto para mostrar tu trabajo.",
+        "nav": {
+          "title": "Configuración del Proyecto",
+          "basic": "Información Básica",
+          "media": "Medios & Recursos",
+          "details": "Detalles & Enlaces"
+        },
+        "basic": {
+          "title": "Información Básica",
+          "description": "Ingresa los datos básicos de tu proyecto.",
+          "fields": {
+            "title": {
+              "label": "Título",
+              "placeholder": "Mi proyecto awesome",
+              "errorMessage": {
+                "minLength": "El título es obligatorio",
+                "maxLength": "El título debe tener menos de 200 caracteres"
+              }
+            },
+            "slug": {
+              "label": "Slug",
+              "placeholder": "mi-proyecto-awesome",
+              "helper": "Identificador URL-friendly",
+              "errorMessage": {
+                "minLength": "El slug es obligatorio",
+                "maxLength": "El slug debe tener menos de 200 caracteres",
+                "pattern": "El slug solo puede contener letras minúsculas, números y guiones"
+              }
+            },
+            "shortDescription": {
+              "label": "Descripción Corta",
+              "placeholder": "Un resumen breve del proyecto",
+              "helper": "Mostrado en tarjetas y vistas previas",
+              "errorMessage": {
+                "maxLength": "La descripción corta debe tener menos de 500 caracteres"
+              }
+            },
+            "description": {
+              "label": "Descripción",
+              "placeholder": "Describe el proyecto en detalle...",
+              "errorMessage": {
+                "maxLength": "La descripción debe tener menos de 4000 caracteres"
+              }
+            }
+          }
+        },
+        "settings": {
+          "title": "Configuración",
+          "description": "Configura la visibilidad y orden del proyecto.",
+          "fields": {
+            "status": {
+              "label": "Estado",
+              "draft": "Borrador",
+              "published": "Publicado",
+              "errorMessage": {
+                "invalid": "El estado debe ser 'draft' o 'published'"
+              }
+            },
+            "order": {
+              "label": "Orden de Visualización",
+              "helper": "Los números menores aparecen primero"
+            },
+            "featured": {
+              "label": "Destacado",
+              "helper": "Mostrar en la sección destacada del inicio"
+            }
+          }
+        },
+        "buttons": {
+          "save": "Crear Proyecto"
+        }
       }
     }
   }
