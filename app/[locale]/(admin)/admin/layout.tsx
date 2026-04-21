@@ -19,7 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const themeInitial = cookieStore.get("theme")?.value || "system";
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen">
       <AdminSidebar
         user={{
           name: session.user.name,

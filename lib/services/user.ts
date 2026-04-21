@@ -3,7 +3,7 @@ import { eq, count } from "drizzle-orm";
 import { user, projects, technologies } from "@/db/schema";
 
 import { ProfileFormData } from "@/lib/schemas/profile";
-import { AppError } from "@/lib/errors/app-error";
+import { AppError, mapDbError } from "@/lib/errors/app-error";
 
 export async function getAdminDashboardData({ userId }: { userId: string }) {
   const [[currentUser], [projectCount], [techCount]] = await Promise.all([
@@ -36,8 +36,6 @@ export async function updateUserData(data: ProfileFormData, userId: string) {
 
     return result[0];
   } catch (error) {
-    console.error("DB error updating user:", error);
-
-    throw new AppError("DB_UPDATE_FAILED");
+    throw mapDbError(error);
   }
 }

@@ -280,6 +280,44 @@
       "form": {
         "title": "New Project",
         "description": "Create a new project to showcase your work.",
+        "createModal": {
+          "title": "Create Project",
+          "description": "Enter the basic details to create a new project.",
+          "fields": {
+            "title": {
+              "label": "Title",
+              "placeholder": "My awesome project",
+              "errorMessage": {
+                "minLength": "Title is required",
+                "maxLength": "Title must be less than 200 characters"
+              }
+            },
+            "slug": {
+              "label": "Slug",
+              "placeholder": "my-awesome-project",
+              "errorMessage": {
+                "minLength": "Slug is required",
+                "maxLength": "Slug must be less than 200 characters",
+                "pattern": "Slug can only contain lowercase letters, numbers, and hyphens"
+              }
+            }
+          },
+          "buttons": {
+            "new": "New Project",
+            "autoGenerate": "Auto-generate",
+            "cancel": "Cancel",
+            "save": "Create Project"
+          },
+          "submit": {
+            "success": "Project created successfully!",
+            "error": {
+              "invalidForm": "Please check the form for errors.",
+              "SLUG_ALREADY_EXISTS": "The slug you entered is already in use. Please choose a different one.",
+              "DB_CREATE_FAILED": "An error occurred while creating the project. Please try again later.",
+              "UNKNOWN_ERROR": "An unexpected error occurred. Please try again."
+            }
+          }
+        },
         "nav": {
           "title": "Project Settings",
           "basic": "Basic Info",
@@ -345,6 +383,13 @@
               "label": "Featured",
               "helper": "Show in homepage featured section"
             }
+          }
+        },
+        "submit": {
+          "error": {
+            "invalidForm": "Please check the form for errors.",
+            "UNKNOWN_ERROR": "An unexpected error occurred. Please try again.",
+            "success": "Project created successfully!"
           }
         },
         "buttons": {

@@ -25,3 +25,12 @@ export function applyServerValidationErrors<T extends FieldValues>(
 export function setCustomCookie(key: string, value: string) {
   document.cookie = `${key}=${value}; path=/`;
 }
+
+export function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}

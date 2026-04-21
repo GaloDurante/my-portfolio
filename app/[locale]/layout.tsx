@@ -37,7 +37,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
 
   return (
     <html suppressHydrationWarning lang="en" className={cn(inter.className, theme === "dark" && "dark")}>
-      <body className="antialiased bg-background">
+      <body className="antialiased bg-background overflow-hidden">
         <ThemeProvider attribute="class" defaultTheme={theme} enableSystem disableTransitionOnChange>
           <Providers>
             <NextIntlClientProvider>

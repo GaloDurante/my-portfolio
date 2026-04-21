@@ -1,7 +1,8 @@
 import db from "@/db";
 import { eq, desc } from "drizzle-orm";
 import { projects } from "@/db/schema";
-import { AppError } from "@/lib/errors/app-error";
+
+import { AppError, mapDbError } from "@/lib/errors/app-error";
 
 export async function getProjectsByUserId(userId: string) {
   return db.select().from(projects).where(eq(projects.userId, userId)).orderBy(desc(projects.order));
@@ -27,8 +28,23 @@ export async function getProjectBySlug(slug: string, userId: string) {
   return project;
 }
 
-export async function deleteProjectById(projectId: string, userId: string) {
-  const [existing] = await db.select().from(projects).where(eq(projects.id, projectId)).limit(1);
+export async function createProject(data: { id: string; userId: string; title: string; slug: string }) {
+  const now = new Date().toISOString();
+
+  try {
+    return await db.insert(projects).values({
+      id: data.id,
+      userId: data.userId,
+      title: data.title,
+      slug: data.slug,
+      status: "draft",
+      createdAt: now,
+      updatedAt: now,
+    });
+  } catch (error) {
+    throw mapDbError(error);
+  }
+}
   
   if (!existing || existing.userId !== userId) {
     throw new Error("NOT_FOUND");

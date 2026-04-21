@@ -8,7 +8,7 @@ import { UpdateProfileResult } from "@/lib/types/profile";
 import { getTranslations } from "next-intl/server";
 
 export async function updateProfile(data: unknown, userId: string): Promise<UpdateProfileResult> {
-  const t = await getTranslations("AdminProfile.form.submit.error");
+  const t = await getTranslations("admin.profile.form");
   const schema = createProfileSchema(t);
 
   const parsed = schema.safeParse(data);
@@ -17,7 +17,7 @@ export async function updateProfile(data: unknown, userId: string): Promise<Upda
 
     return {
       success: false,
-      message: t("invalidForm"),
+      message: t("submit.error.invalidForm"),
       code: "VALIDATION_ERROR",
       errors: {
         fieldErrors: flattened.fieldErrors,
@@ -34,14 +34,14 @@ export async function updateProfile(data: unknown, userId: string): Promise<Upda
     if (error instanceof AppError) {
       return {
         success: false,
-        message: t(error.code),
+        message: t(`submit.error.${error.code}`),
         code: error.code,
       };
     }
 
     return {
       success: false,
-      message: t("UNKNOWN_ERROR"),
+      message: t("submit.error.UNKNOWN_ERROR"),
       code: "UNKNOWN_ERROR",
     };
   }

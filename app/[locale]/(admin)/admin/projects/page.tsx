@@ -5,9 +5,8 @@ import { getTranslations } from "next-intl/server";
 
 import { getProjectsByUserId } from "@/lib/services/project";
 
-import { Button } from "@/components/ui/button";
 import { ProjectList } from "@/components/admin/projects/project-list";
-import { Link } from "@/i18n/navigation";
+import { ProjectCreateDialog } from "@/components/admin/projects/project-create-dialog";
 
 export const metadata: Metadata = {
   title: "Projects | Portfolio Galo Durante",
@@ -32,9 +31,7 @@ export default async function ProjectsPage() {
           <p className="text-muted-foreground mt-1">{t("welcome")}</p>
         </div>
 
-        <Button asChild className="self-end md:self-auto">
-          <Link href="/admin/projects/new">{t("list.buttons.create")}</Link>
-        </Button>
+        <ProjectCreateDialog userId={session.user.id} />
       </div>
 
       <ProjectList projects={projects} userId={session.user.id} />
