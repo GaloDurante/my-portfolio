@@ -1,19 +1,19 @@
-import { projects } from "@/db/schema";
 import { ErrorCode, ValidationErrors } from "@/lib/types/error";
-import { ProjectBasicFormData } from "@/lib/schemas/project/project-basic";
+import { ProjectFormData } from "@/lib/schemas/project";
 
-export type ProjectType = typeof projects.$inferSelect;
-
-export type CreateProjectResult =
-  | { success: true; projectId: string }
+type baseProjectType =
   | {
       success: false;
       message: string;
       code: "VALIDATION_ERROR";
-      errors: ValidationErrors<ProjectBasicFormData>;
+      errors: ValidationErrors<ProjectFormData>;
     }
   | {
       success: false;
       message: string;
       code: ErrorCode;
     };
+
+export type CreateProjectResult = { success: true; projectId: string } | baseProjectType;
+
+export type UpdateProjectResult = { success: true } | baseProjectType;

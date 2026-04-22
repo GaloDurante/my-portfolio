@@ -1,8 +1,8 @@
 "use server";
 
-import { createProject, deleteProjectById } from "@/lib/services/project";
-import { createProjectSchema } from "@/lib/schemas/project";
-import { CreateProjectResult } from "@/lib/types/project";
+import { createProject, updateProjectById, deleteProjectById } from "@/lib/services/project";
+import { createProjectSchema, updateProjectBasicSchema } from "@/lib/schemas/project";
+import { CreateProjectResult, UpdateProjectResult } from "@/lib/types/project";
 import { DeleteResult } from "@/lib/types/utils";
 import { AppError } from "@/lib/errors/app-error";
 import { nanoid } from "nanoid";
@@ -55,6 +55,47 @@ export async function createProjectAction(data: unknown, userId: string): Promis
     };
   }
 }
+
+export async function updateProjectBasicAction(projectId: string, data: unknown): Promise<UpdateProjectResult> {
+  const t = await getTranslations("admin.projects.form");
+  const schema = updateProjectBasicSchema(t);
+
+  const parsed = schema.safeParse(data);
+  if (!parsed.success) {
+    const flattened = parsed.error.flatten();
+
+    return {
+      success: false,
+      message: t("submit.error.invalidForm"),
+      code: "VALIDATION_ERROR",
+      errors: {
+        fieldErrors: flattened.fieldErrors,
+        formErrors: flattened.formErrors,
+      },
+    };
+  }
+
+  try {
+    await updateProjectById(projectId, parsed.data);
+
+    return { success: true };
+  } catch (error) {
+    if (error instanceof AppError) {
+      return {
+        success: false,
+        message: t(`submit.error.${error.code}`),
+        code: error.code,
+      };
+    }
+
+    return {
+      success: false,
+      message: t("submit.error.UNKNOWN_ERROR"),
+      code: "UNKNOWN_ERROR",
+    };
+  }
+}
+
 
 export async function deleteProjectAction(projectId: string, userId: string): Promise<DeleteResult> {
   const t = await getTranslations("admin.projects.form.submit.error");

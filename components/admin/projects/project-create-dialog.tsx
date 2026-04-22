@@ -8,7 +8,7 @@ import { useRouter } from "@/i18n/navigation";
 
 import { createProjectAction } from "@/lib/actions/project-actions";
 import { applyServerValidationErrors, generateSlug } from "@/lib/utils";
-import { createProjectSchema, type ProjectFormData } from "@/lib/schemas/project";
+import { createProjectSchema, type CreateProjectFormData } from "@/lib/schemas/project";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,7 +39,7 @@ export function ProjectCreateDialog({ userId }: ProjectCreateDialogProps) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<ProjectFormData>({
+  const form = useForm<CreateProjectFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       title: "",
@@ -96,23 +96,23 @@ export function ProjectCreateDialog({ userId }: ProjectCreateDialogProps) {
 
         <form onSubmit={onSubmit} className="space-y-4">
           <Field data-invalid={!!form.formState.errors.title}>
-            <FieldLabel htmlFor="title">{t("createModal.fields.title.label")}</FieldLabel>
+            <FieldLabel htmlFor="title">{t("basic.fields.title.label")}</FieldLabel>
             <Input
               id="title"
               {...form.register("title")}
-              placeholder={t("createModal.fields.title.placeholder")}
+              placeholder={t("basic.fields.title.placeholder")}
               aria-invalid={!!form.formState.errors.title}
             />
             <FieldError>{form.formState.errors.title?.message}</FieldError>
           </Field>
 
           <Field data-invalid={!!form.formState.errors.slug}>
-            <FieldLabel htmlFor="slug">{t("createModal.fields.slug.label")}</FieldLabel>
+            <FieldLabel htmlFor="slug">{t("basic.fields.slug.label")}</FieldLabel>
             <div className="flex items-center gap-2">
               <Input
                 id="slug"
                 {...form.register("slug")}
-                placeholder={t("createModal.fields.slug.placeholder")}
+                placeholder={t("basic.fields.slug.placeholder")}
                 aria-invalid={!!form.formState.errors.slug}
               />
               <Button

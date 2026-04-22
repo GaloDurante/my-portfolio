@@ -83,7 +83,7 @@ export async function ProjectList({ projects, userId }: ProjectListProps) {
             <TableCell className="text-right">
               <div className="flex gap-2 justify-end">
                 <Button variant="ghost" asChild>
-                  <Link href={`/admin/projects/${project.id}/edit`}>
+                  <Link href={`/admin/projects/${project.id}`}>
                     <Pencil data-icon="inline-start" />
                     {t("buttons.edit")}
                   </Link>

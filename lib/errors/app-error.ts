@@ -33,5 +33,5 @@ export function mapDbError(error: unknown): AppError {
     return new AppError("Email already exists", "EMAIL_ALREADY_EXISTS");
   }
 
-  return new AppError("Database error", "DB_CREATE_FAILED");
+  return new AppError("Database error", "DB_FAILED");
 }

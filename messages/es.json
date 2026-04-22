@@ -223,7 +223,7 @@
           "error": {
             "invalidForm": "Por favor, corrige los errores en el formulario e inténtalo de nuevo.",
             "USER_NOT_FOUND": "Usuario no encontrado. Por favor, recarga la página e inténtalo de nuevo.",
-            "DB_UPDATE_FAILED": "Ocurrió un error al actualizar tu perfil. Por favor, inténtalo de nuevo más tarde.",
+            "DB_FAILED": "Ocurrió un error al actualizar tu perfil. Por favor, inténtalo de nuevo más tarde.",
             "UNKNOWN_ERROR": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
           }
         }
@@ -258,7 +258,7 @@
           "submit": {
             "success": "Proyecto eliminado exitosamente.",
             "error": {
-              "DB_DELETE_FAILED": "Ocurrió un error al eliminar el proyecto. Por favor, inténtalo de nuevo más tarde.",
+              "DB_FAILED": "Ocurrió un error al eliminar el proyecto. Por favor, inténtalo de nuevo más tarde.",
               "UNKNOWN_ERROR": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde."
             }
           },
@@ -276,30 +276,10 @@
         }
       },
       "form": {
-        "title": "Nuevo Proyecto",
-        "description": "Crea un nuevo proyecto para mostrar tu trabajo.",
         "createModal": {
           "title": "Crear Proyecto",
           "description": "Ingresa los datos básicos para crear un nuevo proyecto.",
-          "fields": {
-            "title": {
-              "label": "Título",
-              "placeholder": "Mi proyecto grandioso",
-              "errorMessage": {
-                "minLength": "El título es obligatorio",
-                "maxLength": "El título debe tener menos de 200 caracteres"
-              }
-            },
-            "slug": {
-              "label": "Slug",
-              "placeholder": "mi-proyecto-grandioso",
-              "errorMessage": {
-                "minLength": "El slug es obligatorio",
-                "maxLength": "El slug debe tener menos de 200 caracteres",
-                "pattern": "El slug solo puede contener letras minúsculas, números y guiones"
-              }
-            }
-          },
+
           "buttons": {
             "new": "Nuevo Proyecto",
             "autoGenerate": "Auto-generar",
@@ -311,11 +291,12 @@
             "error": {
               "invalidForm": "Por favor revisa el formulario para errores.",
               "SLUG_ALREADY_EXISTS": "El slug que ingresaste ya está en uso. Por favor elige uno diferente.",
-              "DB_CREATE_FAILED": "Ocurrió un error al crear el proyecto. Por favor intenta de nuevo más tarde.",
+              "DB_FAILED": "Ocurrió un error al crear el proyecto. Por favor intenta de nuevo más tarde.",
               "UNKNOWN_ERROR": "Ocurrió un error inesperado. Por favor intenta de nuevo."
             }
           }
         },
+        "label": "Define la identidad fundamental de tu proyecto. Esta información aparecerá en el feed principal de tu portafolio y en las páginas de detalles.",
         "nav": {
           "title": "Configuración del Proyecto",
           "basic": "Información Básica",
@@ -384,14 +365,26 @@
           }
         },
         "submit": {
+          "success": {
+            "title": "Proyecto actualizado!",
+            "basic": "Información básica actualizada exitosamente.",
+            "media": "Medios actualizados exitosamente.",
+            "details": "Detalles actualizados exitosamente.",
+            "links": "Enlaces actualizados exitosamente.",
+            "dates": "Fechas actualizadas exitosamente.",
+            "settings": "Configuración actualizada exitosamente.",
+            "tech": "Tecnologías actualizadas exitosamente."
+          },
           "error": {
+            "title": "Error al actualizar el proyecto",
             "invalidForm": "Por favor revisa el formulario para errores.",
-            "UNKNOWN_ERROR": "Ocurrió un error inesperado. Por favor intenta de nuevo.",
-            "success": "¡Proyecto creado exitosamente!"
+            "SLUG_ALREADY_EXISTS": "El slug que ingresaste ya está en uso. Por favor elige uno diferente.",
+            "DB_FAILED": "Ocurrió un error al actualizar el proyecto. Por favor intenta de nuevo más tarde.",
+            "UNKNOWN_ERROR": "Ocurrió un error inesperado. Por favor intenta de nuevo."
           }
         },
         "buttons": {
-          "save": "Crear Proyecto"
+          "save": "Guardar Cambios"
         }
       }
     }
