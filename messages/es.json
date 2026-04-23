@@ -335,10 +335,66 @@
             },
             "description": {
               "label": "Descripción",
-              "placeholder": "Describe el proyecto en detalle...",
+              "placeholder": "Describe tu proyecto en detalle...",
               "errorMessage": {
                 "maxLength": "La descripción debe tener menos de 4000 caracteres"
               }
+            }
+          }
+        },
+        "media": {
+          "title": "Medios",
+          "description": "Añade imágenes y miniaturas para tu proyecto.",
+          "fields": {
+            "thumbnail": {
+              "label": "URL de Miniaturan",
+              "placeholder": "https://example.com/thumbnail.jpg",
+              "helper": "Imagen principal mostrada en tarjetas",
+              "errorMessage": {
+                "url": "Ingresa una URL válida"
+              }
+            },
+            "images": {
+              "label": "Imágenes de Galería",
+              "placeholder": "https://example.com/image.jpg",
+              "helper": "Una URL por línea",
+              "add": "Añadir Imagen"
+            }
+          }
+        },
+        "details": {
+          "title": "Detalles & Enlaces",
+          "description": "Configura enlaces, fechas y opciones adicionales."
+        },
+        "links": {
+          "title": "Enlaces",
+          "description": "Añade enlaces externos para tu proyecto.",
+          "fields": {
+            "demo": {
+              "label": "URL de Demo",
+              "placeholder": "https://demo.example.com",
+              "errorMessage": {
+                "url": "Ingresa una URL válida"
+              }
+            },
+            "repo": {
+              "label": "URL del Repositorio",
+              "placeholder": "https://github.com/user/repo",
+              "errorMessage": {
+                "url": "Ingresa una URL válida"
+              }
+            }
+          }
+        },
+        "dates": {
+          "title": "Fechas",
+          "description": "Configura la línea de tiempo del proyecto.",
+          "fields": {
+            "start": {
+              "label": "Fecha de Inicio"
+            },
+            "end": {
+              "label": "Fecha de Fin"
             }
           }
         },
@@ -348,6 +404,7 @@
           "fields": {
             "status": {
               "label": "Estado",
+              "placeholder": "Selecciona un estado",
               "draft": "Borrador",
               "published": "Publicado",
               "errorMessage": {
@@ -364,6 +421,17 @@
             "featured": {
               "label": "Destacado",
               "helper": "Mostrar en la sección destacada del inicio"
+            }
+          }
+        },
+        "tech": {
+          "title": "Tecnologías",
+          "description": "Selecciona las tecnologías usadas en este proyecto.",
+          "fields": {
+            "technologies": {
+              "label": "Tecnologías",
+              "placeholder": "react, node, postgresql",
+              "helper": "Separadas por comas"
             }
           }
         },

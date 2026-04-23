@@ -344,12 +344,69 @@
             }
           }
         },
+        "media": {
+          "title": "Media",
+          "description": "Add images and thumbnails for your project.",
+          "fields": {
+            "thumbnail": {
+              "label": "Thumbnail URL",
+              "placeholder": "https://example.com/thumbnail.jpg",
+              "helper": "Main image displayed in cards",
+              "errorMessage": {
+                "url": "Please enter a valid URL"
+              }
+            },
+            "images": {
+              "label": "Gallery Images",
+              "placeholder": "https://example.com/image.jpg",
+              "helper": "One URL per line",
+              "add": "Add Image"
+            }
+          }
+        },
+        "details": {
+          "title": "Details & Links",
+          "description": "Configure links, dates, and additional options."
+        },
+        "links": {
+          "title": "Links",
+          "description": "Add external links for your project.",
+          "fields": {
+            "demo": {
+              "label": "Demo URL",
+              "placeholder": "https://demo.example.com",
+              "errorMessage": {
+                "url": "Please enter a valid URL"
+              }
+            },
+            "repo": {
+              "label": "Repository URL",
+              "placeholder": "https://github.com/user/repo",
+              "errorMessage": {
+                "url": "Please enter a valid URL"
+              }
+            }
+          }
+        },
+        "dates": {
+          "title": "Dates",
+          "description": "Set the project timeline.",
+          "fields": {
+            "start": {
+              "label": "Start Date"
+            },
+            "end": {
+              "label": "End Date"
+            }
+          }
+        },
         "settings": {
           "title": "Settings",
           "description": "Configure project visibility and order.",
           "fields": {
             "status": {
               "label": "Status",
+              "placeholder": "Select a status",
               "draft": "Draft",
               "published": "Published",
               "errorMessage": {
@@ -367,6 +424,13 @@
               "label": "Featured",
               "helper": "Show in homepage featured section"
             }
+          }
+        },
+        "tech": {
+          "title": "Technologies",
+          "description": "Select technologies used in this project.",
+          "toolbar": {
+            "placeholder": "Select technologies..."
           }
         },
         "submit": {
