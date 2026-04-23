@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 
 import { getProjectById } from "@/lib/services/project";
 
@@ -32,15 +31,5 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
     notFound();
   }
 
-  const t = await getTranslations("admin.projects.form");
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{project.title}</h1>
-        <p className="text-muted-foreground mt-1">{t("label")}</p>
-      </div>
-      <ProjectForm projectData={project} />
-    </div>
-  );
+  return <ProjectForm projectData={project} />;
 }

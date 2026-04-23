@@ -1,7 +1,7 @@
 "use server";
 
 import { createProject, updateProjectById, deleteProjectById } from "@/lib/services/project";
-import { createProjectSchema, updateProjectBasicSchema } from "@/lib/schemas/project";
+import { buildProjectSchema, createProjectSchema } from "@/lib/schemas/project";
 import { CreateProjectResult, UpdateProjectResult } from "@/lib/types/project";
 import { DeleteResult } from "@/lib/types/utils";
 import { AppError } from "@/lib/errors/app-error";
@@ -56,9 +56,9 @@ export async function createProjectAction(data: unknown, userId: string): Promis
   }
 }
 
-export async function updateProjectBasicAction(projectId: string, data: unknown): Promise<UpdateProjectResult> {
+export async function updateProjectAction(projectId: string, data: unknown): Promise<UpdateProjectResult> {
   const t = await getTranslations("admin.projects.form");
-  const schema = updateProjectBasicSchema(t);
+  const schema = buildProjectSchema(t);
 
   const parsed = schema.safeParse(data);
   if (!parsed.success) {
@@ -76,7 +76,22 @@ export async function updateProjectBasicAction(projectId: string, data: unknown)
   }
 
   try {
-    await updateProjectById(projectId, parsed.data);
+    await updateProjectById(projectId, {
+      title: parsed.data.title,
+      slug: parsed.data.slug,
+      description: parsed.data.description,
+      shortDescription: parsed.data.shortDescription,
+      thumbnail: parsed.data.thumbnail,
+      images: parsed.data.images,
+      technologies: parsed.data.technologies,
+      demoUrl: parsed.data.demoUrl,
+      repoUrl: parsed.data.repoUrl,
+      featured: parsed.data.featured,
+      status: parsed.data.status,
+      order: parsed.data.order,
+      startDate: parsed.data.startDate,
+      endDate: parsed.data.endDate,
+    });
 
     return { success: true };
   } catch (error) {
@@ -95,7 +110,6 @@ export async function updateProjectBasicAction(projectId: string, data: unknown)
     };
   }
 }
-
 
 export async function deleteProjectAction(projectId: string, userId: string): Promise<DeleteResult> {
   const t = await getTranslations("admin.projects.form.submit.error");

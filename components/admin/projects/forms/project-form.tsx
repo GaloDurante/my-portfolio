@@ -1,15 +1,27 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useRouter } from "@/i18n/navigation";
 
-import { type ProjectFormData } from "@/lib/schemas/project";
+import { buildProjectSchema, type ProjectFormData } from "@/lib/schemas/project";
+import { updateProjectAction } from "@/lib/actions/project-actions";
+import { applyServerValidationErrors } from "@/lib/utils";
 
-import { ProjectNavigation, type ProjectTab } from "./form-navigation";
-import { ProjectFormBasic } from "./project-form-basic";
-import { Layers, Tag, Link2 } from "lucide-react";
-// import { ProjectFormMedia } from "./project-form-media";
-// import { ProjectFormDetails } from "./project-form-details";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { Save, RotateCcw } from "lucide-react";
+
+import {
+  ProjectCardBasic,
+  ProjectCardDates,
+  ProjectCardLinks,
+  ProjectCardMedia,
+  ProjectCardSettings,
+  ProjectCardTech,
+} from "@/components/admin/projects/forms";
 
 interface ProjectFormProps {
   projectData: ProjectFormData;
@@ -17,67 +29,104 @@ interface ProjectFormProps {
 
 export function ProjectForm({ projectData }: ProjectFormProps) {
   const t = useTranslations("admin.projects.form");
+  const schema = buildProjectSchema(t);
+  const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState<ProjectTab>("basic");
+  const form = useForm<ProjectFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      id: projectData.id,
+      title: projectData.title,
+      slug: projectData.slug,
+      description: projectData.description,
+      shortDescription: projectData.shortDescription,
+      thumbnail: projectData.thumbnail,
+      images: projectData.images,
+      technologies: projectData.technologies,
+      demoUrl: projectData.demoUrl,
+      repoUrl: projectData.repoUrl,
+      featured: projectData.featured,
+      status: projectData.status,
+      order: projectData.order,
+      startDate: projectData.startDate,
+      endDate: projectData.endDate,
+    },
+  });
 
-  const handleTabChange = (tab: ProjectTab) => {
-    setActiveTab(tab);
-  };
+  const onSubmit = form.handleSubmit(async (data) => {
+    const result = await updateProjectAction(projectData.id, data);
 
-  const tabTitles: Record<ProjectTab, string> = {
-    basic: t("basic.title"),
-    media: t("media.title"),
-    details: t("details.title"),
-  };
+    if (!result.success) {
+      if (result.code === "VALIDATION_ERROR") {
+        applyServerValidationErrors(form, result.errors.fieldErrors);
+        return;
+      }
 
-  const tabDescriptions: Record<ProjectTab, string> = {
-    basic: t("basic.description"),
-    media: t("media.description"),
-    details: t("details.description"),
-  };
-
-  const renderActiveSection = () => {
-    if (!projectData.id) return null;
-
-    switch (activeTab) {
-      case "basic":
-        return (
-          <ProjectFormBasic
-            projectId={projectData.id}
-            defaultValues={{
-              title: projectData.title,
-              slug: projectData.slug,
-              description: projectData.description,
-              shortDescription: projectData.shortDescription,
-            }}
-          />
-        );
-      case "media":
-      // return <ProjectFormMedia userId={userId} projectId={projectId} />;
-      case "details":
-      // return <ProjectFormDetails userId={userId} projectId={projectId} />;
-      default:
-        return null;
+      toast.error(t("submit.error.title"), {
+        description: result.message,
+      });
+      return;
     }
+
+    toast.success(t("submit.success.title"), {
+      description: t("submit.success.description"),
+    });
+    form.reset(data);
+    router.refresh();
+  });
+
+  const isPending = form.formState.isSubmitting;
+  const isDirty = form.formState.isDirty;
+
+  const handleDiscard = () => {
+    form.reset();
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
-      <ProjectNavigation activeTab={activeTab} onTabChange={handleTabChange} />
-
-      <div className="space-y-6 rounded-lg border bg-card p-6">
-        <div className="space-y-1">
-          <div className="flex gap-2 items-center">
-            {activeTab === "basic" && <Layers size={20} />}
-            {activeTab === "media" && <Tag size={20} />}
-            {activeTab === "details" && <Link2 size={20} />}
-            <h2 className="text-lg font-semibold">{tabTitles[activeTab]}</h2>
+    <form onSubmit={onSubmit}>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">{projectData.title}</h1>
+            <p className="text-sm text-muted-foreground mt-1">{t("label")}</p>
           </div>
-          <p className="text-sm text-muted-foreground">{tabDescriptions[activeTab]}</p>
+
+          <div className="flex items-center gap-2">
+            {isDirty && (
+              <>
+                <Button type="button" variant="outline" onClick={handleDiscard}>
+                  <RotateCcw size={16} data-icon="inline-start" />
+                  {t("buttons.discard")}
+                </Button>
+                <Button type="submit" disabled={isPending}>
+                  {isPending && <Spinner data-icon="inline-start" />}
+                  <Save size={16} data-icon="inline-start" />
+                  {t("buttons.save")}
+                </Button>
+              </>
+            )}
+          </div>
         </div>
 
-        {renderActiveSection()}
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-6">
+            <ProjectCardBasic register={form.register} errors={form.formState.errors} setValue={form.setValue} />
+            <ProjectCardLinks register={form.register} errors={form.formState.errors} />
+            <ProjectCardMedia register={form.register} errors={form.formState.errors} />
+          </div>
+
+          <div className="space-y-6">
+            <ProjectCardSettings
+              register={form.register}
+              errors={form.formState.errors}
+              watch={form.watch}
+              setValue={form.setValue}
+            />
+            <ProjectCardDates register={form.register} errors={form.formState.errors} />
+            <ProjectCardTech register={form.register} errors={form.formState.errors} />
+          </div>
+        </div>
       </div>
-    </div>
+    </form>
   );
 }

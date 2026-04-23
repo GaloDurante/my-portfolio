@@ -358,7 +358,10 @@
             },
             "order": {
               "label": "Display Order",
-              "helper": "Lower numbers appear first"
+              "helper": "Lower numbers appear first",
+              "errorMessage": {
+                "min": "Expected a number greater than or equal to 0"
+              }
             },
             "featured": {
               "label": "Featured",
@@ -369,13 +372,7 @@
         "submit": {
           "success": {
             "title": "Project updated!",
-            "basic": "Basic information updated successfully.",
-            "media": "Media updated successfully.",
-            "details": "Details updated successfully.",
-            "links": "Links updated successfully.",
-            "dates": "Dates updated successfully.",
-            "settings": "Settings updated successfully.",
-            "tech": "Technologies updated successfully."
+            "description": "Information updated successfully."
           },
           "error": {
             "title": "Error updating project",
@@ -386,7 +383,8 @@
           }
         },
         "buttons": {
-          "save": "Save Changes"
+          "save": "Save Changes",
+          "discard": "Discard Changes"
         }
       }
     }

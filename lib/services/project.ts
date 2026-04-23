@@ -49,20 +49,20 @@ export async function createProject(data: { id: string; userId: string; title: s
 
 export async function updateProjectById(projectId: string, data: Partial<ProjectFormData>) {
   try {
-  const [existing] = await db.select().from(projects).where(eq(projects.id, projectId)).limit(1);
+    const [existing] = await db.select().from(projects).where(eq(projects.id, projectId)).limit(1);
 
-  if (!existing) {
-    throw new AppError("NOT_FOUND");
-  }
+    if (!existing) {
+      throw new AppError("NOT_FOUND");
+    }
 
-  const updateData: Record<string, unknown> = {
-    ...data,
-    updatedAt: new Date().toISOString(),
-  };
+    const updateData: Record<string, unknown> = {
+      ...data,
+      updatedAt: new Date().toISOString(),
+    };
 
-  if (typeof data.featured === "boolean") {
-    updateData.featured = data.featured ? 1 : 0;
-  }
+    if (typeof data.featured === "boolean") {
+      updateData.featured = data.featured ? 1 : 0;
+    }
 
     return await db.update(projects).set(updateData).where(eq(projects.id, projectId));
   } catch (error) {

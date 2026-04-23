@@ -356,7 +356,10 @@
             },
             "order": {
               "label": "Orden de Visualización",
-              "helper": "Los números menores aparecen primero"
+              "helper": "Los números menores aparecen primero",
+              "errorMessage": {
+                "min": "Se espera un número mayor o igual a 0"
+              }
             },
             "featured": {
               "label": "Destacado",
@@ -367,13 +370,7 @@
         "submit": {
           "success": {
             "title": "Proyecto actualizado!",
-            "basic": "Información básica actualizada exitosamente.",
-            "media": "Medios actualizados exitosamente.",
-            "details": "Detalles actualizados exitosamente.",
-            "links": "Enlaces actualizados exitosamente.",
-            "dates": "Fechas actualizadas exitosamente.",
-            "settings": "Configuración actualizada exitosamente.",
-            "tech": "Tecnologías actualizadas exitosamente."
+            "description": "Información actualizada exitosamente."
           },
           "error": {
             "title": "Error al actualizar el proyecto",
@@ -384,7 +381,8 @@
           }
         },
         "buttons": {
-          "save": "Guardar Cambios"
+          "save": "Guardar Cambios",
+          "discard": "Descartar Cambios"
         }
       }
     }

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TranslatorType } from "@/lib/types/i18n";
 
-const BuildProjectSchema = (t: TranslatorType) =>
+export const buildProjectSchema = (t: TranslatorType) =>
   z.object({
     id: z.string(),
     title: z
@@ -22,27 +22,17 @@ const BuildProjectSchema = (t: TranslatorType) =>
     repoUrl: z.string().nullable(),
     featured: z.boolean().nullable(),
     status: z.enum(["draft", "published"], t("settings.fields.status.errorMessage.invalid")).nullable(),
-    order: z.number().int().min(0).nullable(),
+    order: z.number().int().min(0, t("settings.fields.order.errorMessage.min")).nullable(),
     startDate: z.string().nullable(),
     endDate: z.string().nullable(),
   });
 
-export type ProjectFormData = z.infer<ReturnType<typeof BuildProjectSchema>>;
+export type ProjectFormData = z.infer<ReturnType<typeof buildProjectSchema>>;
 
 export const createProjectSchema = (t: TranslatorType) =>
-  BuildProjectSchema(t).pick({
+  buildProjectSchema(t).pick({
     title: true,
     slug: true,
   });
 
 export type CreateProjectFormData = z.infer<ReturnType<typeof createProjectSchema>>;
-
-export const updateProjectBasicSchema = (t: TranslatorType) =>
-  BuildProjectSchema(t).pick({
-    title: true,
-    slug: true,
-    description: true,
-    shortDescription: true,
-  });
-
-export type UpdateProjectBasicFormData = z.infer<ReturnType<typeof updateProjectBasicSchema>>;
